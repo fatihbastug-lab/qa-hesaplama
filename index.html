@@ -3,66 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QA Verimlilik Hesaplayıcı</title>
+    <title>QA & MMA Verimlilik Paneli</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding: 20px; background: #f4f7f6; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
-        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        button:hover { background: #219150; }
-        #result { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; text-align: center; }
-        .score { font-size: 24px; font-weight: bold; margin-top: 10px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding: 20px; background: #eceff1; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { color: #2c3e50; text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .section-title { font-weight: bold; color: #2980b9; margin-top: 20px; margin-bottom: 10px; display: block; border-left: 4px solid #2980b9; padding-left: 8px; }
+        .input-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .input-group { flex: 1; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #666; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #2980b9; }
+        button { width: 100%; padding: 15px; background: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-top: 20px; transition: 0.3s; }
+        button:hover { background: #1a252f; }
+        #resultBox { margin-top: 25px; padding: 20px; border-radius: 10px; display: none; text-align: center; animation: fadeIn 0.5s; }
+        .main-score { font-size: 32px; font-weight: bold; margin: 10px 0; }
+        .details { font-size: 14px; color: #555; line-height: 1.6; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>QA Verimlilik</h2>
-    <div class="input-group">
-        <label>Dinlenen Çağrı Sayısı</label>
-        <input type="number" id="cagriSayisi" placeholder="Örn: 40">
+    <h2>QA Performans Takibi</h2>
+    
+    <span class="section-title">Normal Çağrı Dinleme</span>
+    <div class="input-row">
+        <div class="input-group">
+            <label>Adet</label>
+            <input type="number" id="normAdet" placeholder="0">
+        </div>
+        <div class="input-group">
+            <label>Ort. Süre (Dakika)</label>
+            <input type="number" id="normSure" placeholder="0">
+        </div>
     </div>
-    <div class="input-group">
-        <label>Ort. Dinleme Süresi (Dakika)</label>
-        <input type="number" id="ortSure" placeholder="Örn: 6.5">
-    </div>
-    <button onclick="hesapla()">Hesapla</button>
 
-    <div id="result">
-        <div id="text"></div>
-        <div id="score" class="score"></div>
+    <span class="section-title">MMA Dinleme</span>
+    <div class="input-row">
+        <div class="input-group">
+            <label>Adet</label>
+            <input type="number" id="mmaAdet" placeholder="0">
+        </div>
+        <div class="input-group">
+            <label>Ort. Süre (Dakika)</label>
+            <input type="number" id="mmaSure" placeholder="0">
+        </div>
+    </div>
+
+    <button onclick="hesapla()">Toplam Verimliliği Hesapla</button>
+
+    <div id="resultBox">
+        <div id="statusText" style="font-weight: bold;"></div>
+        <div id="totalScore" class="main-score"></div>
+        <div id="details" class="details"></div>
     </div>
 </div>
 
 <script>
     function hesapla() {
-        const n = parseFloat(document.getElementById('cagriSayisi').value);
-        const t = parseFloat(document.getElementById('ortSure').value);
+        // Değerleri al (boşsa 0 kabul et)
+        const nAdet = parseFloat(document.getElementById('normAdet').value) || 0;
+        const nSure = parseFloat(document.getElementById('normSure').value) || 0;
+        const mAdet = parseFloat(document.getElementById('mmaAdet').value) || 0;
+        const mSure = parseFloat(document.getElementById('mmaSure').value) || 0;
+
+        // Hesaplamalar
+        const normalDakika = (nAdet * nSure) + (nAdet * 2);
+        const mmaDakika = mAdet * (mSure / 2);
+        const toplamDakika = normalDakika + mmaDakika;
+        const verimlilik = (toplamDakika / 540) * 100;
+
+        // UI Güncelleme
+        const box = document.getElementById('resultBox');
+        box.style.display = 'block';
         
-        if (isNaN(n) || isNaN(t)) {
-            alert("Lütfen tüm alanları doldurun!");
-            return;
+        document.getElementById('totalScore').innerText = "%" + verimlilik.toFixed(2);
+        document.getElementById('details').innerHTML = `
+            Normal Dinleme: ${normalDakika.toFixed(1)} dk<br>
+            MMA Dinleme: ${mmaDakika.toFixed(1)} dk<br>
+            <b>Toplam Mesai Kullanımı: ${toplamDakika.toFixed(1)} / 540 dk</b>
+        `;
+
+        // Renk Kodları
+        if (verimlilik >= 90) { 
+            box.style.background = '#e8f5e9'; 
+            box.style.color = '#2e7d32';
+            document.getElementById('statusText').innerText = "Mükemmel Performans! 🚀";
+        } else if (verimlilik >= 70) {
+            box.style.background = '#fff3e0';
+            box.style.color = '#ef6c00';
+            document.getElementById('statusText').innerText = "Standart Performans 👍";
+        } else {
+            box.style.background = '#ffebee';
+            box.style.color = '#c62828';
+            document.getElementById('statusText').innerText = "Geliştirilmesi Gereken Performans ⚠️";
         }
-
-        // Senin formülün: (Sayı * Süre + Sayı * 2) / 540
-        const toplamIs = (n * t) + (n * 2);
-        const oran = (toplamIs / 540) * 100;
-
-        const resDiv = document.getElementById('result');
-        const scoreDiv = document.getElementById('score');
-        const textDiv = document.getElementById('text');
-
-        resDiv.style.display = 'block';
-        textDiv.innerText = "Günlük Kapasite Kullanımı:";
-        scoreDiv.innerText = "%" + oran.toFixed(2);
-        
-        // Renk geri bildirimi
-        if (oran > 100) { resDiv.style.background = '#e8f5e9'; scoreDiv.style.color = '#2e7d32'; }
-        else if (oran > 70) { resDiv.style.background = '#fff3e0'; scoreDiv.style.color = '#ef6c00'; }
-        else { resDiv.style.background = '#ffebee'; scoreDiv.style.color = '#c62828'; }
     }
 </script>
 
