@@ -3,28 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QA & MMA Verimlilik Paneli</title>
+    <title>NET Call Center | QA Performans Paneli</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding: 20px; background: #eceff1; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
-        h2 { color: #2c3e50; text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .section-title { font-weight: bold; color: #2980b9; margin-top: 20px; margin-bottom: 10px; display: block; border-left: 4px solid #2980b9; padding-left: 8px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; background: #eceff1; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; }
+        
+        /* --- Logo Stili Buradan Başlıyor --- */
+        .logo-container { margin-bottom: 25px; }
+        .logo-container img { 
+            max-width: 180px;  /* Logonun maksimum genişliği */
+            height: auto;      /* Orantılı yükseklik */
+        }
+        /* --- Logo Stili Burada Bitiyor --- */
+
+        h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        .section-title { font-weight: bold; color: #cc0000; margin-top: 20px; margin-bottom: 10px; display: block; border-left: 4px solid #cc0000; padding-left: 8px; text-align: left;}
         .input-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .input-group { flex: 1; }
+        .input-group { flex: 1; text-align: left;}
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #666; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: #2980b9; }
+        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s;}
+        input:focus { border-color: #cc0000; box-shadow: 0 0 5px rgba(204,0,0,0.2); }
         button { width: 100%; padding: 15px; background: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-top: 20px; transition: 0.3s; }
         button:hover { background: #1a252f; }
         #resultBox { margin-top: 25px; padding: 20px; border-radius: 10px; display: none; text-align: center; animation: fadeIn 0.5s; }
         .main-score { font-size: 32px; font-weight: bold; margin: 10px 0; }
-        .details { font-size: 14px; color: #555; line-height: 1.6; }
+        .details { font-size: 14px; color: #555; line-height: 1.6; text-align: left; background: rgba(255,255,255,0.7); padding: 10px; border-radius: 6px;}
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="card">
+    <div class="logo-container">
+        <img src="logo.png" alt="NET Call Center Logo">
+    </div>
     <h2>QA Performans Takibi</h2>
     
     <span class="section-title">Normal Çağrı Dinleme</span>
@@ -62,30 +74,27 @@
 
 <script>
     function hesapla() {
-        // Değerleri al (boşsa 0 kabul et)
         const nAdet = parseFloat(document.getElementById('normAdet').value) || 0;
         const nSure = parseFloat(document.getElementById('normSure').value) || 0;
         const mAdet = parseFloat(document.getElementById('mmaAdet').value) || 0;
         const mSure = parseFloat(document.getElementById('mmaSure').value) || 0;
 
-        // Hesaplamalar
         const normalDakika = (nAdet * nSure) + (nAdet * 2);
         const mmaDakika = mAdet * (mSure / 2);
         const toplamDakika = normalDakika + mmaDakika;
         const verimlilik = (toplamDakika / 540) * 100;
 
-        // UI Güncelleme
         const box = document.getElementById('resultBox');
         box.style.display = 'block';
         
         document.getElementById('totalScore').innerText = "%" + verimlilik.toFixed(2);
         document.getElementById('details').innerHTML = `
-            Normal Dinleme: ${normalDakika.toFixed(1)} dk<br>
-            MMA Dinleme: ${mmaDakika.toFixed(1)} dk<br>
-            <b>Toplam Mesai Kullanımı: ${toplamDakika.toFixed(1)} / 540 dk</b>
+            <strong>Normal Dinleme:</strong> ${normalDakika.toFixed(1)} dk<br>
+            <strong>MMA Dinleme:</strong> ${mmaDakika.toFixed(1)} dk<br>
+            <hr style="border:0; border-top:1px solid #ccc;">
+            <strong>Toplam Mesai Kullanımı: ${toplamDakika.toFixed(1)} / 540 dk</strong>
         `;
 
-        // Renk Kodları
         if (verimlilik >= 90) { 
             box.style.background = '#e8f5e9'; 
             box.style.color = '#2e7d32';
