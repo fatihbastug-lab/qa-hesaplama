@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NET Call Center | QA Dashboard Pro</title>
+    <title>NET Call Center | Verimlilik Takibi</title>
     <style>
         :root { 
             --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
@@ -14,7 +14,7 @@
             --card-bg: #2d2d2d; --text: #f4f4f4; --border: #444444;
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 20px; transition: 0.3s; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 500px; position: relative; }
+        .card { background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 500px; position: relative; text-align: center; }
         
         .theme-switch { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 20px; }
         .logo-container img { max-width: 130px; margin-bottom: 10px; }
@@ -22,20 +22,19 @@
         .info-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; }
         
         .section { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); text-align: left; }
-        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--primary); }
+        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--primary); text-transform: uppercase; }
         input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; background: var(--bg); color: var(--text); outline: none; }
         
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        button { flex: 1; padding: 14px; background: var(--secondary); color: var(--bg); border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 5px; }
         button:hover { opacity: 0.9; transform: scale(0.98); }
-        .btn-share { background: #27ae60; display: none; margin-top: 10px; }
+        .btn-share { background: #27ae60; display: none; margin-top: 15px; }
 
         .results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
         .res-card { padding: 12px; border-radius: 10px; color: white; text-align: center; }
         .val { font-size: 20px; font-weight: bold; display: block; }
         .lbl { font-size: 9px; text-transform: uppercase; font-weight: bold; }
         
-        #oneriBox { margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border); text-align: left; font-size: 12px; }
+        #oneriBox { margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border); text-align: left; font-size: 12px; color: #7f8c8d; }
     </style>
 </head>
 <body data-theme="light">
@@ -43,6 +42,7 @@
 <div class="card">
     <div class="theme-switch" onclick="toggleTheme()">🌓</div>
     <div class="logo-container"><img src="netcc.png" alt="NET CC"></div>
+    <h2 style="font-size: 18px; margin-bottom: 15px;">Verimlilik Takibi</h2>
     
     <div class="info-bar">
         <span>🕒 08:30 - 18:45</span>
@@ -52,24 +52,24 @@
     </div>
 
     <div class="section">
-        <label>Normal Çağrı Dinleme</label>
+        <label>Normal İşlem Takibi</label>
         <div style="display: flex; gap: 8px;">
-            <input type="number" id="nAdet" placeholder="Adet">
-            <input type="number" id="nSure" placeholder="Ort. Süre">
+            <input type="number" id="nAdet" placeholder="İşlem Adedi" inputmode="decimal">
+            <input type="number" id="nSure" placeholder="Ort. Süre (dk)" inputmode="decimal">
         </div>
     </div>
 
     <div class="section" style="border-left-color: #2980b9;">
-        <label>MMA Dinleme (Süre/2)</label>
+        <label>Ek İşlem (Katsayı: 0.5)</label>
         <div style="display: flex; gap: 8px;">
-            <input type="number" id="mAdet" placeholder="Adet">
-            <input type="number" id="mSure" placeholder="Ort. Süre">
+            <input type="number" id="mAdet" placeholder="İşlem Adedi" inputmode="decimal">
+            <input type="number" id="mSure" placeholder="Ort. Süre (dk)" inputmode="decimal">
         </div>
     </div>
 
     <div class="section" style="border-left-color: #f1c40f;">
-        <label>Toplantı Süresi (Dakika)</label>
-        <input type="number" id="toplantiDk" placeholder="Toplam dk">
+        <label>Toplantı / Eğitim Süresi</label>
+        <input type="number" id="toplantiDk" placeholder="Toplam Dakika" inputmode="decimal">
     </div>
 
     <button onclick="hesapla()">HESAPLA & ANALİZ ET</button>
@@ -91,7 +91,7 @@
     </div>
 
     <div id="oneriBox">
-        <b>💡 İpucu:</b> Verimliliğin %65 altındaysa "Boşta" süreni kontrol etmeyi unutma!
+        <b>💡 Not:</b> Verimlilik, mesai başlangıcından (08:30) şu ana kadar geçen süre üzerinden reel olarak hesaplanır.
     </div>
 </div>
 
@@ -104,27 +104,30 @@
     let sonSkor = "";
 
     function hesapla() {
-        const nA = parseFloat(document.getElementById('nAdet').value) || 0;
-        const nS = parseFloat(document.getElementById('nSure').value) || 0;
-        const mA = parseFloat(document.getElementById('mAdet').value) || 0;
-        const mS = parseFloat(document.getElementById('mSure').value) || 0;
+        const nAdet = parseFloat(document.getElementById('nAdet').value) || 0;
+        const nSure = parseFloat(document.getElementById('nSure').value) || 0;
+        const mAdet = parseFloat(document.getElementById('mAdet').value) || 0;
+        const mSure = parseFloat(document.getElementById('mSure').value) || 0;
         const tDk = parseFloat(document.getElementById('toplantiDk').value) || 0;
 
         const simdi = new Date();
         const baslangic = new Date();
         baslangic.setHours(8, 30, 0);
-        let gecenMesai = Math.floor((simdi - baslangic) / 1000 / 60);
-        if (gecenMesai < 0) gecenMesai = 0;
-        if (gecenMesai > 615) gecenMesai = 615;
-
-        const normalIs = (nA * nS) + (nA * 2);
-        const mmaIs = mA * (mS / 2);
-        const toplantiVerimliDk = tDk * 0.70; 
         
-        const toplamYapilanIs = normalIs + mmaIs + toplantiVerimliDk;
-        const verimlilik = (toplamYapilanIs / 540) * 100;
-        const bosDk = gecenMesai - toplamYapilanIs;
+        let gecenMesai = Math.floor((simdi - baslangic) / 1000 / 60);
+        if (gecenMesai < 1) gecenMesai = 1; // Bölme hatası olmaması için
+        if (gecenMesai > 615) gecenMesai = 615; // Mesai bitiş sınırı
 
+        // Hesaplama Mantığı
+        const normalIsYuk = (nAdet * nSure) + (nAdet * 2); // İşlem + 2dk idari pay
+        const ekIsYuk = mAdet * (mSure * 0.5); // Ek işlem katsayısı
+        const toplantiYuk = tDk * 0.70; // Toplantı verim katsayısı
+        
+        const toplamUretim = normalIsYuk + ekIsYuk + toplantiYuk;
+        const verimlilik = (toplamUretim / gecenMesai) * 100;
+        const bosDk = gecenMesai - toplamUretim;
+
+        // UI Güncelleme
         document.getElementById('results').style.display = 'grid';
         document.getElementById('shareBtn').style.display = 'block';
         document.getElementById('resVerim').innerText = "%" + verimlilik.toFixed(1);
@@ -135,25 +138,20 @@
         const durum = verimlilik >= 65 ? "BAŞARILI ✅" : "HEDEF ALTI ⚠️";
         vBox.style.background = verimlilik >= 65 ? "#27ae60" : "#c0392b";
 
-        // Paylaşım metnini hazırla
-        sonSkor = `📊 QA Performans Raporu\n--------------------------\n📈 Verimlilik: %${verimlilik.toFixed(1)}\n⏱ Geçen Mesai: ${gecenMesai} dk\n☕ Boşta/Mola: ${bosDk.toFixed(0)} dk\n📝 Durum: ${durum}\n--------------------------\n#NetCC #QA`;
+        sonSkor = `📊 Verimlilik Takibi\n--------------------------\n📈 Verimlilik: %${verimlilik.toFixed(1)}\n⏱ Geçen Mesai: ${gecenMesai} dk\n☕ Boşta/Mola: ${bosDk > 0 ? bosDk.toFixed(0) : 0} dk\n📝 Durum: ${durum}\n--------------------------\n#NetCC #Verimlilik`;
     }
 
     async function paylas() {
         if (navigator.share) {
             try {
-                await navigator.share({ title: 'QA Verimlilik', text: sonSkor });
-            } catch (err) {
-                kopyala();
-            }
-        } else {
-            kopyala();
-        }
+                await navigator.share({ title: 'Verimlilik Raporu', text: sonSkor });
+            } catch (err) { kopyala(); }
+        } else { kopyala(); }
     }
 
     function kopyala() {
         navigator.clipboard.writeText(sonSkor);
-        alert("Rapor panoya kopyalandı! İstediğin yere yapıştırabilirsin.");
+        alert("Rapor kopyalandı!");
     }
 </script>
 
