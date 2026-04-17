@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NET Call Center | Verimlilik Takibi</title>
+    <title>Verimlilik Takibi Pro</title>
     <style>
         :root { 
             --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
@@ -15,83 +15,75 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 20px; transition: 0.3s; }
         .card { background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 500px; position: relative; text-align: center; }
-        
         .theme-switch { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 20px; }
-        .logo-container img { max-width: 130px; margin-bottom: 10px; }
-        
         .info-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; }
-        
         .section { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); text-align: left; }
         label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--primary); text-transform: uppercase; }
         input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; background: var(--bg); color: var(--text); outline: none; }
-        
         button { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 5px; }
-        button:hover { opacity: 0.9; transform: scale(0.98); }
-        .btn-share { background: #27ae60; display: none; margin-top: 15px; }
-
         .results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
         .res-card { padding: 12px; border-radius: 10px; color: white; text-align: center; }
-        .val { font-size: 20px; font-weight: bold; display: block; }
+        .val { font-size: 18px; font-weight: bold; display: block; }
         .lbl { font-size: 9px; text-transform: uppercase; font-weight: bold; }
-        
-        #oneriBox { margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border); text-align: left; font-size: 12px; color: #7f8c8d; }
+        #targetBox { margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.03); border-radius: 10px; text-align: left; font-size: 13px; line-height: 1.5; border: 1px solid var(--border); }
     </style>
 </head>
 <body data-theme="light">
 
 <div class="card">
     <div class="theme-switch" onclick="toggleTheme()">🌓</div>
-    <div class="logo-container"><img src="netcc.png" alt="NET CC"></div>
     <h2 style="font-size: 18px; margin-bottom: 15px;">Verimlilik Takibi</h2>
     
     <div class="info-bar">
-        <span>🕒 08:30 - 18:45</span>
-        <span>☕ 75 dk Mola</span>
-        <span>🤝 Toplantı: %70 Verim</span>
-        <span>🎯 Hedef: %65</span>
+        <span>🕒 Mesai: 08:30 - 18:45</span>
+        <span>☕ Toplam: 615 dk</span>
+        <span>🤝 Toplantı Verimi: %70</span>
+        <span>🎯 Hedef Verim: %65</span>
     </div>
 
     <div class="section">
         <label>Normal İşlem Takibi</label>
         <div style="display: flex; gap: 8px;">
-            <input type="number" id="nAdet" placeholder="İşlem Adedi" inputmode="decimal">
-            <input type="number" id="nSure" placeholder="Ort. Süre (dk)" inputmode="decimal">
+            <input type="number" id="nAdet" placeholder="Adet" inputmode="decimal">
+            <input type="number" id="nSure" placeholder="Ort. Süre" inputmode="decimal">
         </div>
     </div>
 
     <div class="section" style="border-left-color: #2980b9;">
         <label>Ek İşlem (Katsayı: 0.5)</label>
         <div style="display: flex; gap: 8px;">
-            <input type="number" id="mAdet" placeholder="İşlem Adedi" inputmode="decimal">
-            <input type="number" id="mSure" placeholder="Ort. Süre (dk)" inputmode="decimal">
+            <input type="number" id="mAdet" placeholder="Adet" inputmode="decimal">
+            <input type="number" id="mSure" placeholder="Ort. Süre" inputmode="decimal">
         </div>
     </div>
 
     <div class="section" style="border-left-color: #f1c40f;">
-        <label>Toplantı / Eğitim Süresi</label>
+        <label>Toplantı / Eğitim (Dakika)</label>
         <input type="number" id="toplantiDk" placeholder="Toplam Dakika" inputmode="decimal">
     </div>
 
-    <button onclick="hesapla()">HESAPLA & ANALİZ ET</button>
-    <button id="shareBtn" class="btn-share" onclick="paylas()">📊 SONUCU PAYLAŞ</button>
+    <button onclick="hesapla()">ANLIK DURUMU ANALİZ ET</button>
 
     <div id="results" class="results">
-        <div class="res-card" id="verimColor" style="grid-column: span 2; padding: 20px;">
+        <div class="res-card" id="verimColor" style="grid-column: span 2; padding: 15px;">
             <span id="resVerim" class="val">%0</span>
-            <span class="lbl">GÜNCEL VERİMLİLİK</span>
+            <span class="lbl">ANLIK VERİMLİLİK (08:30'DAN BERİ)</span>
         </div>
-        <div class="res-card" style="background: #34495e;">
-            <span id="resGecen" class="val">0</span>
-            <span class="lbl">GEÇEN MESAİ (DK)</span>
+        <div class="res-card" style="background: #27ae60;">
+            <span id="resUretim" class="val">0 dk</span>
+            <span class="lbl">ÜRETİLEN İŞ SÜRESİ</span>
         </div>
         <div class="res-card" style="background: #e67e22;">
-            <span id="resBos" class="val">0</span>
-            <span class="lbl">BOŞTA + MOLA (DK)</span>
+            <span id="resMola" class="val">0 dk</span>
+            <span class="lbl">MOLA VE ZAMAN KAYBI</span>
         </div>
     </div>
 
-    <div id="oneriBox">
-        <b>💡 Not:</b> Verimlilik, mesai başlangıcından (08:30) şu ana kadar geçen süre üzerinden reel olarak hesaplanır.
+    <div id="targetBox" style="display:none;">
+        <strong>🏁 Kalan Zaman Analizi:</strong><br>
+        • Mesai Bitimine: <span id="kalanMesai">0</span> dk var.<br>
+        • Hedef için gereken ek iş: <span id="gerekenIs">0</span> dk.<br>
+        • <span id="tavsiye">Analiz yapılıyor...</span>
     </div>
 </div>
 
@@ -101,59 +93,61 @@
         body.dataset.theme = body.dataset.theme === "light" ? "dark" : "light";
     }
 
-    let sonSkor = "";
-
     function hesapla() {
-        const nAdet = parseFloat(document.getElementById('nAdet').value) || 0;
-        const nSure = parseFloat(document.getElementById('nSure').value) || 0;
-        const mAdet = parseFloat(document.getElementById('mAdet').value) || 0;
-        const mSure = parseFloat(document.getElementById('mSure').value) || 0;
+        const nA = parseFloat(document.getElementById('nAdet').value) || 0;
+        const nS = parseFloat(document.getElementById('nSure').value) || 0;
+        const mA = parseFloat(document.getElementById('mAdet').value) || 0;
+        const mS = parseFloat(document.getElementById('mSure').value) || 0;
         const tDk = parseFloat(document.getElementById('toplantiDk').value) || 0;
 
         const simdi = new Date();
         const baslangic = new Date();
         baslangic.setHours(8, 30, 0);
-        
-        let gecenMesai = Math.floor((simdi - baslangic) / 1000 / 60);
-        if (gecenMesai < 1) gecenMesai = 1; // Bölme hatası olmaması için
-        if (gecenMesai > 615) gecenMesai = 615; // Mesai bitiş sınırı
+        const bitis = new Date();
+        bitis.setHours(18, 45, 0);
 
-        // Hesaplama Mantığı
-        const normalIsYuk = (nAdet * nSure) + (nAdet * 2); // İşlem + 2dk idari pay
-        const ekIsYuk = mAdet * (mSure * 0.5); // Ek işlem katsayısı
-        const toplantiYuk = tDk * 0.70; // Toplantı verim katsayısı
+        let gecenMesai = Math.floor((simdi - baslangic) / 1000 / 60);
+        gecenMesai = Math.max(1, Math.min(gecenMesai, 615));
         
-        const toplamUretim = normalIsYuk + ekIsYuk + toplantiYuk;
-        const verimlilik = (toplamUretim / gecenMesai) * 100;
-        const bosDk = gecenMesai - toplamUretim;
+        let kalanMesai = Math.floor((bitis - simdi) / 1000 / 60);
+        kalanMesai = Math.max(0, kalanMesai);
+
+        // Üretilen İş Yükü
+        const uretim = (nA * nS) + (nA * 2) + (mA * (mS * 0.5)) + (tDk * 0.70);
+        const verimlilik = (uretim / gecenMesai) * 100;
+        const molaKayiP = gecenMesai - uretim;
+
+        // Hedef Hesaplama (%65 verim için gün sonunda toplam ne kadar iş üretilmeli?)
+        // Toplam Mesai 615 dk * 0.65 = 400 dk üretim lazım.
+        const gunlukHedefUretim = 615 * 0.65;
+        const gerekenEkUretim = Math.max(0, gunlukHedefUretim - uretim);
 
         // UI Güncelleme
         document.getElementById('results').style.display = 'grid';
-        document.getElementById('shareBtn').style.display = 'block';
+        document.getElementById('targetBox').style.display = 'block';
+        
         document.getElementById('resVerim').innerText = "%" + verimlilik.toFixed(1);
-        document.getElementById('resGecen').innerText = gecenMesai;
-        document.getElementById('resBos').innerText = bosDk > 0 ? bosDk.toFixed(0) : 0;
+        document.getElementById('resUretim').innerText = uretim.toFixed(0) + " dk";
+        document.getElementById('resMola').innerText = (molaKayiP > 0 ? molaKayiP.toFixed(0) : 0) + " dk";
+        
+        document.getElementById('kalanMesai').innerText = kalanMesai;
+        document.getElementById('gerekenIs').innerText = gerekenEkUretim.toFixed(0);
 
         const vBox = document.getElementById('verimColor');
-        const durum = verimlilik >= 65 ? "BAŞARILI ✅" : "HEDEF ALTI ⚠️";
         vBox.style.background = verimlilik >= 65 ? "#27ae60" : "#c0392b";
 
-        sonSkor = `📊 Verimlilik Takibi\n--------------------------\n📈 Verimlilik: %${verimlilik.toFixed(1)}\n⏱ Geçen Mesai: ${gecenMesai} dk\n☕ Boşta/Mola: ${bosDk > 0 ? bosDk.toFixed(0) : 0} dk\n📝 Durum: ${durum}\n--------------------------\n#NetCC #Verimlilik`;
-    }
-
-    async function paylas() {
-        if (navigator.share) {
-            try {
-                await navigator.share({ title: 'Verimlilik Raporu', text: sonSkor });
-            } catch (err) { kopyala(); }
-        } else { kopyala(); }
-    }
-
-    function kopyala() {
-        navigator.clipboard.writeText(sonSkor);
-        alert("Rapor kopyalandı!");
+        // Tavsiye Metni
+        const tavsiyeElt = document.getElementById('tavsiye');
+        if (kalanMesai <= 0) {
+            tavsiyeElt.innerText = "Mesai bitti. İyi dinlenmeler!";
+        } else if (uretim >= gunlukHedefUretim) {
+            tavsiyeElt.innerText = "Tebrikler! Günlük hedefi şimdiden yakaladın.";
+        } else {
+            const ortSure = nS || 8; // Eğer süre girilmediyse 8 dk varsayalım
+            const kalanAdet = Math.ceil(gerekenEkUretim / (ortSure + 2));
+            tavsiyeElt.innerText = `Hedef için kalan sürede yaklaşık ${kalanAdet} normal işlem daha yapmalısın.`;
+        }
     }
 </script>
-
 </body>
 </html>
