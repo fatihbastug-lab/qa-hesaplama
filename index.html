@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NET Call Center | QA Hedef Takip</title>
+    <title>NET Call Center | Zaman & Verimlilik Analizi</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
         .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; }
-        .logo-container img { max-width: 150px; margin-bottom: 15px; }
-        h2 { color: #333; margin-bottom: 20px; font-size: 22px; }
+        .logo-container img { max-width: 140px; margin-bottom: 10px; }
+        h2 { color: #333; font-size: 20px; margin-bottom: 5px; }
+        .shift-info { font-size: 12px; color: #777; margin-bottom: 20px; }
         
-        .section { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left; border-left: 5px solid #cc0000; }
-        label { display: block; font-size: 12px; color: #666; font-weight: bold; margin-bottom: 5px; }
-        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; }
+        .section { background: #f8f9fa; padding: 12px; border-radius: 10px; margin-bottom: 15px; text-align: left; border-left: 5px solid #cc0000; }
+        label { display: block; font-size: 11px; color: #666; font-weight: bold; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
         
-        button { width: 100%; padding: 15px; background: #cc0000; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #a80000; transform: translateY(-2px); }
+        button { width: 100%; padding: 15px; background: #2c3e50; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #1a252f; }
 
-        /* Progress Bar */
-        .progress-container { margin-top: 25px; background: #eee; border-radius: 10px; height: 25px; overflow: hidden; display:none; position: relative; }
-        .progress-bar { height: 100%; width: 0%; transition: width 1s; }
-        .target-line { position: absolute; left: 65%; top: 0; bottom: 0; width: 2px; background: #333; z-index: 2; }
-        .target-label { position: absolute; left: 66%; top: 2px; font-size: 10px; font-weight: bold; color: #333; z-index: 2; }
-
-        #resultBox { margin-top: 20px; display: none; padding: 15px; border-radius: 10px; }
-        .advice { font-size: 13px; margin-top: 10px; font-style: italic; color: #555; }
+        .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
+        .analysis-item { padding: 15px; border-radius: 10px; color: white; }
+        .bg-blue { background: #2980b9; }
+        .bg-orange { background: #e67e22; }
+        .bg-green { background: #27ae60; }
+        .bg-red { background: #c0392b; }
         
-        table { width: 100%; margin-top: 20px; font-size: 12px; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background: #eee; }
+        .stat-val { font-size: 20px; font-weight: bold; display: block; }
+        .stat-lbl { font-size: 11px; opacity: 0.9; }
+
+        #targetMessage { margin-top: 15px; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 14px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <div class="logo-container">
-        <img src="logo.png" alt="Logo">
-    </div>
-    <h2>QA Performans Paneli</h2>
+    <div class="logo-container"><img src="logo.png" alt="Logo"></div>
+    <h2>QA Performans & Zaman Analizi</h2>
+    <div class="shift-info">Mesai Başlangıcı: 08:30 | Hedef: %65</div>
 
     <div class="section">
         <label>NORMAL DİNLEME</label>
@@ -55,72 +54,70 @@
         </div>
     </div>
 
-    <button onclick="hesapla()">HESAPLA & KAYDET</button>
+    <button onclick="analizEt()">ANALİZİ ÇALIŞTIR</button>
 
-    <div id="progressContainer" class="progress-container">
-        <div class="target-line"></div>
-        <div class="target-label">HEDEF %65</div>
-        <div id="pBar" class="progress-bar"></div>
+    <div id="analysisGrid" class="analysis-grid">
+        <div class="analysis-item bg-blue">
+            <span id="gecenSure" class="stat-val">0</span>
+            <span class="stat-lbl">Toplam Mesai (dk)</span>
+        </div>
+        <div class="analysis-item bg-green">
+            <span id="dinlemeSure" class="stat-val">0</span>
+            <span class="stat-lbl">Dinleme Toplam (dk)</span>
+        </div>
+        <div class="analysis-item bg-orange">
+            <span id="bosSure" class="stat-val">0</span>
+            <span class="stat-lbl">Boşta Geçen (dk)</span>
+        </div>
+        <div class="analysis-item bg-red">
+            <span id="verimSkor" class="stat-val">%0</span>
+            <span class="stat-lbl">Genel Verimlilik</span>
+        </div>
     </div>
 
-    <div id="resultBox">
-        <div id="scoreText" style="font-size: 28px; font-weight: bold;"></div>
-        <div id="adviceText" class="advice"></div>
-    </div>
-
-    <table id="historyTable" style="display:none;">
-        <thead>
-            <tr>
-                <th>Saat</th>
-                <th>Toplam dk</th>
-                <th>Verimlilik</th>
-            </tr>
-        </thead>
-        <tbody id="historyBody"></tbody>
-    </table>
+    <div id="targetMessage"></div>
 </div>
 
 <script>
-    function hesapla() {
+    function analizEt() {
         const nA = parseFloat(document.getElementById('nAdet').value) || 0;
         const nS = parseFloat(document.getElementById('nSure').value) || 0;
         const mA = parseFloat(document.getElementById('mAdet').value) || 0;
         const mS = parseFloat(document.getElementById('mSure').value) || 0;
 
-        const toplamDk = (nA * nS + nA * 2) + (mA * (mS / 2));
-        const oran = (toplamDk / 540) * 100;
-        const hedef = 65;
+        // 1. Zaman Hesaplama (08:30'dan şu ana)
+        const simdi = new Date();
+        const baslangic = new Date();
+        baslangic.setHours(8, 30, 0);
 
-        // UI Elementleri
-        const resBox = document.getElementById('resultBox');
-        const pBar = document.getElementById('pBar');
-        const pCont = document.getElementById('progressContainer');
-        
-        resBox.style.display = 'block';
-        pCont.style.display = 'block';
-        
-        // Progress Bar ve Renk Ayarı
-        pBar.style.width = Math.min(oran, 100) + "%";
-        if (oran < hedef) {
-            pBar.style.background = "#e67e22"; // Turuncu
-            resBox.style.background = "#fff3e0";
-            const eksikDk = (540 * 0.65) - toplamDk;
-            const tahminiCagri = Math.ceil(eksikDk / (nS + 2 || 8));
-            document.getElementById('adviceText').innerText = `Hedefe ulaşmak için ~${tahminiCagri} normal çağrı daha dinlemelisin.`;
+        let farkDakika = Math.floor((simdi - baslangic) / 1000 / 60);
+        if (farkDakika < 0) farkDakika = 0; // Eğer saat 08:30'dan önceyse
+        if (farkDakika > 540) farkDakika = 540; // Maksimum mesai 540 dk
+
+        // 2. İş Yükü Hesaplama
+        const dinlemeDk = (nA * nS + nA * 2) + (mA * (mS / 2));
+        const bosDk = farkDakika - dinlemeDk;
+        const verimlilik = (dinlemeDk / 540) * 100;
+
+        // 3. UI Güncelleme
+        document.getElementById('analysisGrid').style.display = 'grid';
+        document.getElementById('gecenSure').innerText = farkDakika;
+        document.getElementById('dinlemeSure').innerText = dinlemeDk.toFixed(0);
+        document.getElementById('bosSure').innerText = bosDk > 0 ? bosDk.toFixed(0) : 0;
+        document.getElementById('verimSkor').innerText = "%" + verimlilik.toFixed(1);
+
+        const msg = document.getElementById('targetMessage');
+        msg.style.display = 'block';
+
+        if (verimlilik >= 65) {
+            msg.style.background = "#e8f5e9";
+            msg.style.color = "#2e7d32";
+            msg.innerText = "TEBRİKLER: Hedefin üzerindesin! ✅";
         } else {
-            pBar.style.background = "#27ae60"; // Yeşil
-            resBox.style.background = "#e8f5e9";
-            document.getElementById('adviceText').innerText = "Tebrikler, minimum hedefi aştın! 🔥";
+            msg.style.background = "#ffebee";
+            msg.style.color = "#c62828";
+            msg.innerText = "UYARI: %65 hedefinin altındasın. Hızlanmalısın! ⚠️";
         }
-
-        document.getElementById('scoreText').innerText = "%" + oran.toFixed(1);
-
-        // Tabloya Ekle
-        const simdi = new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
-        const table = document.getElementById('historyTable');
-        table.style.display = 'table';
-        const row = `<tr><td>${simdi}</td><td>${toplamDk.toFixed(0)}</td><td>%${oran.toFixed(1)}</td></tr>`;
-        document.getElementById('historyBody').innerHTML = row + document.getElementById('historyBody').innerHTML;
     }
 </script>
 
