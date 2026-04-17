@@ -3,121 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NET Call Center | Zaman & Verimlilik Analizi</title>
+    <title>NET Call Center | QA Dashboard Pro</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; }
-        .logo-container img { max-width: 140px; margin-bottom: 10px; }
-        h2 { color: #333; font-size: 20px; margin-bottom: 5px; }
-        .shift-info { font-size: 12px; color: #777; margin-bottom: 20px; }
+        :root { 
+            --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
+            --card-bg: #ffffff; --text: #333333; --border: #eeeeee;
+        }
+        [data-theme="dark"] {
+            --primary: #ff4d4d; --secondary: #ecf0f1; --bg: #1a1a1a; 
+            --card-bg: #2d2d2d; --text: #f4f4f4; --border: #444444;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 20px; transition: 0.3s; }
+        .card { background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 500px; position: relative; }
         
-        .section { background: #f8f9fa; padding: 12px; border-radius: 10px; margin-bottom: 15px; text-align: left; border-left: 5px solid #cc0000; }
-        label { display: block; font-size: 11px; color: #666; font-weight: bold; margin-bottom: 5px; }
-        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .theme-switch { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 20px; }
+        .logo-container img { max-width: 130px; margin-bottom: 10px; }
         
-        button { width: 100%; padding: 15px; background: #2c3e50; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        button:hover { background: #1a252f; }
+        .info-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; }
+        
+        .section { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); text-align: left; }
+        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--primary); }
+        input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; background: var(--bg); color: var(--text); outline: none; }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        button { flex: 1; padding: 14px; background: var(--secondary); color: var(--bg); border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { opacity: 0.9; transform: scale(0.98); }
+        .btn-share { background: #27ae60; display: none; margin-top: 10px; }
 
-        .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
-        .analysis-item { padding: 15px; border-radius: 10px; color: white; }
-        .bg-blue { background: #2980b9; }
-        .bg-orange { background: #e67e22; }
-        .bg-green { background: #27ae60; }
-        .bg-red { background: #c0392b; }
+        .results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
+        .res-card { padding: 12px; border-radius: 10px; color: white; text-align: center; }
+        .val { font-size: 20px; font-weight: bold; display: block; }
+        .lbl { font-size: 9px; text-transform: uppercase; font-weight: bold; }
         
-        .stat-val { font-size: 20px; font-weight: bold; display: block; }
-        .stat-lbl { font-size: 11px; opacity: 0.9; }
-
-        #targetMessage { margin-top: 15px; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 14px; display: none; }
+        #oneriBox { margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border); text-align: left; font-size: 12px; }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
 <div class="card">
-    <div class="logo-container"><img src="logo.png" alt="Logo"></div>
-    <h2>QA Performans & Zaman Analizi</h2>
-    <div class="shift-info">Mesai Başlangıcı: 08:30 | Hedef: %65</div>
+    <div class="theme-switch" onclick="toggleTheme()">🌓</div>
+    <div class="logo-container"><img src="netcc.png" alt="NET CC"></div>
+    
+    <div class="info-bar">
+        <span>🕒 08:30 - 18:45</span>
+        <span>☕ 75 dk Mola</span>
+        <span>🤝 Toplantı: %70 Verim</span>
+        <span>🎯 Hedef: %65</span>
+    </div>
 
     <div class="section">
-        <label>NORMAL DİNLEME</label>
-        <div style="display: flex; gap: 10px;">
+        <label>Normal Çağrı Dinleme</label>
+        <div style="display: flex; gap: 8px;">
             <input type="number" id="nAdet" placeholder="Adet">
             <input type="number" id="nSure" placeholder="Ort. Süre">
         </div>
     </div>
 
     <div class="section" style="border-left-color: #2980b9;">
-        <label>MMA DİNLEME</label>
-        <div style="display: flex; gap: 10px;">
+        <label>MMA Dinleme (Süre/2)</label>
+        <div style="display: flex; gap: 8px;">
             <input type="number" id="mAdet" placeholder="Adet">
             <input type="number" id="mSure" placeholder="Ort. Süre">
         </div>
     </div>
 
-    <button onclick="analizEt()">ANALİZİ ÇALIŞTIR</button>
+    <div class="section" style="border-left-color: #f1c40f;">
+        <label>Toplantı Süresi (Dakika)</label>
+        <input type="number" id="toplantiDk" placeholder="Toplam dk">
+    </div>
 
-    <div id="analysisGrid" class="analysis-grid">
-        <div class="analysis-item bg-blue">
-            <span id="gecenSure" class="stat-val">0</span>
-            <span class="stat-lbl">Toplam Mesai (dk)</span>
+    <button onclick="hesapla()">HESAPLA & ANALİZ ET</button>
+    <button id="shareBtn" class="btn-share" onclick="paylas()">📊 SONUCU PAYLAŞ</button>
+
+    <div id="results" class="results">
+        <div class="res-card" id="verimColor" style="grid-column: span 2; padding: 20px;">
+            <span id="resVerim" class="val">%0</span>
+            <span class="lbl">GÜNCEL VERİMLİLİK</span>
         </div>
-        <div class="analysis-item bg-green">
-            <span id="dinlemeSure" class="stat-val">0</span>
-            <span class="stat-lbl">Dinleme Toplam (dk)</span>
+        <div class="res-card" style="background: #34495e;">
+            <span id="resGecen" class="val">0</span>
+            <span class="lbl">GEÇEN MESAİ (DK)</span>
         </div>
-        <div class="analysis-item bg-orange">
-            <span id="bosSure" class="stat-val">0</span>
-            <span class="stat-lbl">Boşta Geçen (dk)</span>
-        </div>
-        <div class="analysis-item bg-red">
-            <span id="verimSkor" class="stat-val">%0</span>
-            <span class="stat-lbl">Genel Verimlilik</span>
+        <div class="res-card" style="background: #e67e22;">
+            <span id="resBos" class="val">0</span>
+            <span class="lbl">BOŞTA + MOLA (DK)</span>
         </div>
     </div>
 
-    <div id="targetMessage"></div>
+    <div id="oneriBox">
+        <b>💡 İpucu:</b> Verimliliğin %65 altındaysa "Boşta" süreni kontrol etmeyi unutma!
+    </div>
 </div>
 
 <script>
-    function analizEt() {
+    function toggleTheme() {
+        const body = document.body;
+        body.dataset.theme = body.dataset.theme === "light" ? "dark" : "light";
+    }
+
+    let sonSkor = "";
+
+    function hesapla() {
         const nA = parseFloat(document.getElementById('nAdet').value) || 0;
         const nS = parseFloat(document.getElementById('nSure').value) || 0;
         const mA = parseFloat(document.getElementById('mAdet').value) || 0;
         const mS = parseFloat(document.getElementById('mSure').value) || 0;
+        const tDk = parseFloat(document.getElementById('toplantiDk').value) || 0;
 
-        // 1. Zaman Hesaplama (08:30'dan şu ana)
         const simdi = new Date();
         const baslangic = new Date();
         baslangic.setHours(8, 30, 0);
+        let gecenMesai = Math.floor((simdi - baslangic) / 1000 / 60);
+        if (gecenMesai < 0) gecenMesai = 0;
+        if (gecenMesai > 615) gecenMesai = 615;
 
-        let farkDakika = Math.floor((simdi - baslangic) / 1000 / 60);
-        if (farkDakika < 0) farkDakika = 0; // Eğer saat 08:30'dan önceyse
-        if (farkDakika > 540) farkDakika = 540; // Maksimum mesai 540 dk
+        const normalIs = (nA * nS) + (nA * 2);
+        const mmaIs = mA * (mS / 2);
+        const toplantiVerimliDk = tDk * 0.70; 
+        
+        const toplamYapilanIs = normalIs + mmaIs + toplantiVerimliDk;
+        const verimlilik = (toplamYapilanIs / 540) * 100;
+        const bosDk = gecenMesai - toplamYapilanIs;
 
-        // 2. İş Yükü Hesaplama
-        const dinlemeDk = (nA * nS + nA * 2) + (mA * (mS / 2));
-        const bosDk = farkDakika - dinlemeDk;
-        const verimlilik = (dinlemeDk / 540) * 100;
+        document.getElementById('results').style.display = 'grid';
+        document.getElementById('shareBtn').style.display = 'block';
+        document.getElementById('resVerim').innerText = "%" + verimlilik.toFixed(1);
+        document.getElementById('resGecen').innerText = gecenMesai;
+        document.getElementById('resBos').innerText = bosDk > 0 ? bosDk.toFixed(0) : 0;
 
-        // 3. UI Güncelleme
-        document.getElementById('analysisGrid').style.display = 'grid';
-        document.getElementById('gecenSure').innerText = farkDakika;
-        document.getElementById('dinlemeSure').innerText = dinlemeDk.toFixed(0);
-        document.getElementById('bosSure').innerText = bosDk > 0 ? bosDk.toFixed(0) : 0;
-        document.getElementById('verimSkor').innerText = "%" + verimlilik.toFixed(1);
+        const vBox = document.getElementById('verimColor');
+        const durum = verimlilik >= 65 ? "BAŞARILI ✅" : "HEDEF ALTI ⚠️";
+        vBox.style.background = verimlilik >= 65 ? "#27ae60" : "#c0392b";
 
-        const msg = document.getElementById('targetMessage');
-        msg.style.display = 'block';
+        // Paylaşım metnini hazırla
+        sonSkor = `📊 QA Performans Raporu\n--------------------------\n📈 Verimlilik: %${verimlilik.toFixed(1)}\n⏱ Geçen Mesai: ${gecenMesai} dk\n☕ Boşta/Mola: ${bosDk.toFixed(0)} dk\n📝 Durum: ${durum}\n--------------------------\n#NetCC #QA`;
+    }
 
-        if (verimlilik >= 65) {
-            msg.style.background = "#e8f5e9";
-            msg.style.color = "#2e7d32";
-            msg.innerText = "TEBRİKLER: Hedefin üzerindesin! ✅";
+    async function paylas() {
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: 'QA Verimlilik', text: sonSkor });
+            } catch (err) {
+                kopyala();
+            }
         } else {
-            msg.style.background = "#ffebee";
-            msg.style.color = "#c62828";
-            msg.innerText = "UYARI: %65 hedefinin altındasın. Hızlanmalısın! ⚠️";
+            kopyala();
         }
+    }
+
+    function kopyala() {
+        navigator.clipboard.writeText(sonSkor);
+        alert("Rapor panoya kopyalandı! İstediğin yere yapıştırabilirsin.");
     }
 </script>
 
