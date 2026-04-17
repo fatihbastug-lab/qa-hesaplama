@@ -3,111 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NET Call Center | QA Performans Paneli</title>
+    <title>NET Call Center | QA Hedef Takip</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; background: #eceff1; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; }
+        .logo-container img { max-width: 150px; margin-bottom: 15px; }
+        h2 { color: #333; margin-bottom: 20px; font-size: 22px; }
         
-        /* --- Logo Stili Buradan Başlıyor --- */
-        .logo-container { margin-bottom: 25px; }
-        .logo-container img { 
-            max-width: 180px;  /* Logonun maksimum genişliği */
-            height: auto;      /* Orantılı yükseklik */
-        }
-        /* --- Logo Stili Burada Bitiyor --- */
+        .section { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left; border-left: 5px solid #cc0000; }
+        label { display: block; font-size: 12px; color: #666; font-weight: bold; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; }
+        
+        button { width: 100%; padding: 15px; background: #cc0000; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #a80000; transform: translateY(-2px); }
 
-        h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
-        .section-title { font-weight: bold; color: #cc0000; margin-top: 20px; margin-bottom: 10px; display: block; border-left: 4px solid #cc0000; padding-left: 8px; text-align: left;}
-        .input-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .input-group { flex: 1; text-align: left;}
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #666; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s;}
-        input:focus { border-color: #cc0000; box-shadow: 0 0 5px rgba(204,0,0,0.2); }
-        button { width: 100%; padding: 15px; background: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-top: 20px; transition: 0.3s; }
-        button:hover { background: #1a252f; }
-        #resultBox { margin-top: 25px; padding: 20px; border-radius: 10px; display: none; text-align: center; animation: fadeIn 0.5s; }
-        .main-score { font-size: 32px; font-weight: bold; margin: 10px 0; }
-        .details { font-size: 14px; color: #555; line-height: 1.6; text-align: left; background: rgba(255,255,255,0.7); padding: 10px; border-radius: 6px;}
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Progress Bar */
+        .progress-container { margin-top: 25px; background: #eee; border-radius: 10px; height: 25px; overflow: hidden; display:none; position: relative; }
+        .progress-bar { height: 100%; width: 0%; transition: width 1s; }
+        .target-line { position: absolute; left: 65%; top: 0; bottom: 0; width: 2px; background: #333; z-index: 2; }
+        .target-label { position: absolute; left: 66%; top: 2px; font-size: 10px; font-weight: bold; color: #333; z-index: 2; }
+
+        #resultBox { margin-top: 20px; display: none; padding: 15px; border-radius: 10px; }
+        .advice { font-size: 13px; margin-top: 10px; font-style: italic; color: #555; }
+        
+        table { width: 100%; margin-top: 20px; font-size: 12px; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background: #eee; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <div class="logo-container">
-        <img src="logo.png" alt="NET Call Center Logo">
+        <img src="logo.png" alt="Logo">
     </div>
-    <h2>QA Performans Takibi</h2>
-    
-    <span class="section-title">Normal Çağrı Dinleme</span>
-    <div class="input-row">
-        <div class="input-group">
-            <label>Adet</label>
-            <input type="number" id="normAdet" placeholder="0">
-        </div>
-        <div class="input-group">
-            <label>Ort. Süre (Dakika)</label>
-            <input type="number" id="normSure" placeholder="0">
+    <h2>QA Performans Paneli</h2>
+
+    <div class="section">
+        <label>NORMAL DİNLEME</label>
+        <div style="display: flex; gap: 10px;">
+            <input type="number" id="nAdet" placeholder="Adet">
+            <input type="number" id="nSure" placeholder="Ort. Süre">
         </div>
     </div>
 
-    <span class="section-title">MMA Dinleme</span>
-    <div class="input-row">
-        <div class="input-group">
-            <label>Adet</label>
-            <input type="number" id="mmaAdet" placeholder="0">
-        </div>
-        <div class="input-group">
-            <label>Ort. Süre (Dakika)</label>
-            <input type="number" id="mmaSure" placeholder="0">
+    <div class="section" style="border-left-color: #2980b9;">
+        <label>MMA DİNLEME</label>
+        <div style="display: flex; gap: 10px;">
+            <input type="number" id="mAdet" placeholder="Adet">
+            <input type="number" id="mSure" placeholder="Ort. Süre">
         </div>
     </div>
 
-    <button onclick="hesapla()">Toplam Verimliliği Hesapla</button>
+    <button onclick="hesapla()">HESAPLA & KAYDET</button>
+
+    <div id="progressContainer" class="progress-container">
+        <div class="target-line"></div>
+        <div class="target-label">HEDEF %65</div>
+        <div id="pBar" class="progress-bar"></div>
+    </div>
 
     <div id="resultBox">
-        <div id="statusText" style="font-weight: bold;"></div>
-        <div id="totalScore" class="main-score"></div>
-        <div id="details" class="details"></div>
+        <div id="scoreText" style="font-size: 28px; font-weight: bold;"></div>
+        <div id="adviceText" class="advice"></div>
     </div>
+
+    <table id="historyTable" style="display:none;">
+        <thead>
+            <tr>
+                <th>Saat</th>
+                <th>Toplam dk</th>
+                <th>Verimlilik</th>
+            </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+    </table>
 </div>
 
 <script>
     function hesapla() {
-        const nAdet = parseFloat(document.getElementById('normAdet').value) || 0;
-        const nSure = parseFloat(document.getElementById('normSure').value) || 0;
-        const mAdet = parseFloat(document.getElementById('mmaAdet').value) || 0;
-        const mSure = parseFloat(document.getElementById('mmaSure').value) || 0;
+        const nA = parseFloat(document.getElementById('nAdet').value) || 0;
+        const nS = parseFloat(document.getElementById('nSure').value) || 0;
+        const mA = parseFloat(document.getElementById('mAdet').value) || 0;
+        const mS = parseFloat(document.getElementById('mSure').value) || 0;
 
-        const normalDakika = (nAdet * nSure) + (nAdet * 2);
-        const mmaDakika = mAdet * (mSure / 2);
-        const toplamDakika = normalDakika + mmaDakika;
-        const verimlilik = (toplamDakika / 540) * 100;
+        const toplamDk = (nA * nS + nA * 2) + (mA * (mS / 2));
+        const oran = (toplamDk / 540) * 100;
+        const hedef = 65;
 
-        const box = document.getElementById('resultBox');
-        box.style.display = 'block';
+        // UI Elementleri
+        const resBox = document.getElementById('resultBox');
+        const pBar = document.getElementById('pBar');
+        const pCont = document.getElementById('progressContainer');
         
-        document.getElementById('totalScore').innerText = "%" + verimlilik.toFixed(2);
-        document.getElementById('details').innerHTML = `
-            <strong>Normal Dinleme:</strong> ${normalDakika.toFixed(1)} dk<br>
-            <strong>MMA Dinleme:</strong> ${mmaDakika.toFixed(1)} dk<br>
-            <hr style="border:0; border-top:1px solid #ccc;">
-            <strong>Toplam Mesai Kullanımı: ${toplamDakika.toFixed(1)} / 540 dk</strong>
-        `;
-
-        if (verimlilik >= 90) { 
-            box.style.background = '#e8f5e9'; 
-            box.style.color = '#2e7d32';
-            document.getElementById('statusText').innerText = "Mükemmel Performans! 🚀";
-        } else if (verimlilik >= 70) {
-            box.style.background = '#fff3e0';
-            box.style.color = '#ef6c00';
-            document.getElementById('statusText').innerText = "Standart Performans 👍";
+        resBox.style.display = 'block';
+        pCont.style.display = 'block';
+        
+        // Progress Bar ve Renk Ayarı
+        pBar.style.width = Math.min(oran, 100) + "%";
+        if (oran < hedef) {
+            pBar.style.background = "#e67e22"; // Turuncu
+            resBox.style.background = "#fff3e0";
+            const eksikDk = (540 * 0.65) - toplamDk;
+            const tahminiCagri = Math.ceil(eksikDk / (nS + 2 || 8));
+            document.getElementById('adviceText').innerText = `Hedefe ulaşmak için ~${tahminiCagri} normal çağrı daha dinlemelisin.`;
         } else {
-            box.style.background = '#ffebee';
-            box.style.color = '#c62828';
-            document.getElementById('statusText').innerText = "Geliştirilmesi Gereken Performans ⚠️";
+            pBar.style.background = "#27ae60"; // Yeşil
+            resBox.style.background = "#e8f5e9";
+            document.getElementById('adviceText').innerText = "Tebrikler, minimum hedefi aştın! 🔥";
         }
+
+        document.getElementById('scoreText').innerText = "%" + oran.toFixed(1);
+
+        // Tabloya Ekle
+        const simdi = new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
+        const table = document.getElementById('historyTable');
+        table.style.display = 'table';
+        const row = `<tr><td>${simdi}</td><td>${toplamDk.toFixed(0)}</td><td>%${oran.toFixed(1)}</td></tr>`;
+        document.getElementById('historyBody').innerHTML = row + document.getElementById('historyBody').innerHTML;
     }
 </script>
 
