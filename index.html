@@ -2,158 +2,166 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NET Call Center | QA Dashboard Pro</title>
+    <title>NET CC | QA Deep Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
-            --card-bg: #ffffff; --text: #333333; --border: #eeeeee;
+            --primary: #ff3b30; --accent: #bc13fe; --bg: #050507; 
+            --card-bg: rgba(15, 15, 20, 0.98); --border: rgba(255, 255, 255, 0.08);
         }
-        [data-theme="dark"] {
-            --primary: #ff4d4d; --secondary: #ecf0f1; --bg: #1a1a1a; 
-            --card-bg: #2d2d2d; --text: #f4f4f4; --border: #444444;
+        body { 
+            font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; 
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0;
+            background-image: radial-gradient(circle at 0% 0%, #1a0a0a 0%, #050507 50%);
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 20px; transition: 0.3s; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 500px; position: relative; }
+        .container { width: 95%; max-width: 1000px; display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
         
-        .theme-switch { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 20px; }
-        .logo-container img { max-width: 130px; margin-bottom: 10px; }
+        /* Sol Kontrol Paneli */
+        .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .logo { font-family: 'Orbitron'; font-size: 18px; color: var(--primary); letter-spacing: 3px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         
-        .info-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; }
-        
-        .section { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); text-align: left; }
-        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--primary); }
-        input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; background: var(--bg); color: var(--text); outline: none; }
-        
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        button { flex: 1; padding: 14px; background: var(--secondary); color: var(--bg); border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        button:hover { opacity: 0.9; transform: scale(0.98); }
-        .btn-share { background: #27ae60; display: none; margin-top: 10px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 10px; color: #666; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
+        input { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: #fff; font-family: 'Orbitron'; box-sizing: border-box; }
+        input:focus { border-color: var(--primary); outline: none; background: rgba(255,59,48,0.05); }
 
-        .results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
-        .res-card { padding: 12px; border-radius: 10px; color: white; text-align: center; }
-        .val { font-size: 20px; font-weight: bold; display: block; }
-        .lbl { font-size: 9px; text-transform: uppercase; font-weight: bold; }
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; font-weight: 700; margin-top: 10px; }
+        button:hover { filter: brightness(1.2); box-shadow: 0 0 15px rgba(255,59,48,0.4); }
+
+        /* Sağ Analiz Dashboard */
+        .main-display { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .bento { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; position: relative; }
+        .full { grid-column: span 2; }
         
-        #oneriBox { margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border); text-align: left; font-size: 12px; }
+        .val-big { font-family: 'Orbitron'; font-size: 60px; font-weight: 700; line-height: 1; margin: 10px 0; }
+        .val-mid { font-family: 'Orbitron'; font-size: 24px; color: var(--accent); }
+        .desc { font-size: 11px; color: #555; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+
+        #intelligence-log { 
+            grid-column: span 2; background: rgba(188, 19, 254, 0.03); 
+            border: 1px dashed var(--accent); padding: 15px; font-size: 13px; color: #aaa; min-height: 80px;
+        }
+        .trend-up { color: #00ff00; }
+        .trend-down { color: #ff3b30; }
     </style>
 </head>
-<body data-theme="light">
+<body>
 
-<div class="card">
-    <div class="theme-switch" onclick="toggleTheme()">🌓</div>
-    <div class="logo-container"><img src="netcc.png" alt="NET CC"></div>
-    
-    <div class="info-bar">
-        <span>🕒 08:30 - 18:45</span>
-        <span>☕ 75 dk Mola</span>
-        <span>🤝 Toplantı: %70 Verim</span>
-        <span>🎯 Hedef: %65</span>
+<div class="container">
+    <div class="panel">
+        <div class="logo">NET CC<br><small style="font-size: 8px;">INTELLIGENCE v3</small></div>
+        
+        <div class="input-group">
+            <label>Normal (Adet | Ort. Sn)</label>
+            <div style="display:flex; gap:5px;">
+                <input type="number" id="nA" placeholder="Adet">
+                <input type="number" id="nS" placeholder="Sn">
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label>MMA (Adet | Ort. Sn)</label>
+            <div style="display:flex; gap:5px;">
+                <input type="number" id="mA" placeholder="Adet">
+                <input type="number" id="mS" placeholder="Sn">
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label>Eğitim / Toplantı (Dakika)</label>
+            <input type="number" id="tD" placeholder="Toplam dk">
+        </div>
+        
+        <button onclick="deepCalculate()">DERİN ANALİZİ ÇALIŞTIR</button>
     </div>
 
-    <div class="section">
-        <label>Normal Çağrı Dinleme</label>
-        <div style="display: flex; gap: 8px;">
-            <input type="number" id="nAdet" placeholder="Adet">
-            <input type="number" id="nSure" placeholder="Ort. Süre">
+    <div class="main-display">
+        <div class="bento full" style="text-align:center; border-bottom: 3px solid var(--primary);">
+            <div class="desc">Gerçek Zamanlı Verimlilik</div>
+            <div class="val-big" id="vRatio">%0</div>
+            <div id="vStatus" style="font-size: 12px; font-weight: 700;">SİSTEM BEKLEMEDE</div>
         </div>
-    </div>
 
-    <div class="section" style="border-left-color: #2980b9;">
-        <label>MMA Dinleme (Süre/2)</label>
-        <div style="display: flex; gap: 8px;">
-            <input type="number" id="mAdet" placeholder="Adet">
-            <input type="number" id="mSure" placeholder="Ort. Süre">
+        <div class="bento">
+            <div class="desc">Kalan Mola Bakiyesi</div>
+            <div class="val-mid" id="vMola">75 <small style="font-size:10px">dk</small></div>
+            <div id="vMolaStatus" style="font-size: 10px; color:#444;">HAKKINIZ VAR</div>
         </div>
-    </div>
 
-    <div class="section" style="border-left-color: #f1c40f;">
-        <label>Toplantı Süresi (Dakika)</label>
-        <input type="number" id="toplantiDk" placeholder="Toplam dk">
-    </div>
-
-    <button onclick="hesapla()">HESAPLA & ANALİZ ET</button>
-    <button id="shareBtn" class="btn-share" onclick="paylas()">📊 SONUCU PAYLAŞ</button>
-
-    <div id="results" class="results">
-        <div class="res-card" id="verimColor" style="grid-column: span 2; padding: 20px;">
-            <span id="resVerim" class="val">%0</span>
-            <span class="lbl">GÜNCEL VERİMLİLİK</span>
+        <div class="bento">
+            <div class="desc">Gün Sonu Projeksiyonu</div>
+            <div class="val-mid" id="vProj">%0</div>
+            <div style="font-size: 10px; color:#444;">TAHMİNİ SKOR</div>
         </div>
-        <div class="res-card" style="background: #34495e;">
-            <span id="resGecen" class="val">0</span>
-            <span class="lbl">GEÇEN MESAİ (DK)</span>
-        </div>
-        <div class="res-card" style="background: #e67e22;">
-            <span id="resBos" class="val">0</span>
-            <span class="lbl">BOŞTA + MOLA (DK)</span>
-        </div>
-    </div>
 
-    <div id="oneriBox">
-        <b>💡 İpucu:</b> Verimliliğin %65 altındaysa "Boşta" süreni kontrol etmeyi unutma!
+        <div id="intelligence-log">
+            <div class="desc" style="color: var(--accent); margin-bottom: 10px;">🧠 Analitik Çıkarımlar</div>
+            <div id="logText">Veri girişi yapıldığında yapay zeka analizi burada görünecektir.</div>
+        </div>
     </div>
 </div>
 
 <script>
-    function toggleTheme() {
-        const body = document.body;
-        body.dataset.theme = body.dataset.theme === "light" ? "dark" : "light";
-    }
+    function deepCalculate() {
+        // Girdiler
+        const nA = parseFloat(document.getElementById('nA').value) || 0;
+        const nS = parseFloat(document.getElementById('nS').value) || 0;
+        const mA = parseFloat(document.getElementById('mA').value) || 0;
+        const mS = parseFloat(document.getElementById('mS').value) || 0;
+        const tD = parseFloat(document.getElementById('tD').value) || 0;
 
-    let sonSkor = "";
-
-    function hesapla() {
-        const nA = parseFloat(document.getElementById('nAdet').value) || 0;
-        const nS = parseFloat(document.getElementById('nSure').value) || 0;
-        const mA = parseFloat(document.getElementById('mAdet').value) || 0;
-        const mS = parseFloat(document.getElementById('mSure').value) || 0;
-        const tDk = parseFloat(document.getElementById('toplantiDk').value) || 0;
-
+        // Zaman Tanımları
         const simdi = new Date();
-        const baslangic = new Date();
-        baslangic.setHours(8, 30, 0);
-        let gecenMesai = Math.floor((simdi - baslangic) / 1000 / 60);
-        if (gecenMesai < 0) gecenMesai = 0;
-        if (gecenMesai > 615) gecenMesai = 615;
-
-        const normalIs = (nA * nS) + (nA * 2);
-        const mmaIs = mA * (mS / 2);
-        const toplantiVerimliDk = tDk * 0.70; 
+        const bas = new Date(); bas.setHours(8, 30, 0);
+        const bit = new Date(); bit.setHours(18, 45, 0);
         
-        const toplamYapilanIs = normalIs + mmaIs + toplantiVerimliDk;
-        const verimlilik = (toplamYapilanIs / 540) * 100;
-        const bosDk = gecenMesai - toplamYapilanIs;
+        let gecenMesai = (simdi - bas) / 1000 / 60;
+        if(gecenMesai < 0) gecenMesai = 0; if(gecenMesai > 615) gecenMesai = 615;
+        let kalanMesai = 615 - gecenMesai;
 
-        document.getElementById('results').style.display = 'grid';
-        document.getElementById('shareBtn').style.display = 'block';
-        document.getElementById('resVerim').innerText = "%" + verimlilik.toFixed(1);
-        document.getElementById('resGecen').innerText = gecenMesai;
-        document.getElementById('resBos').innerText = bosDk > 0 ? bosDk.toFixed(0) : 0;
+        // Analiz Motoru
+        const normalWork = (nA * nS) + (nA * 2);
+        const mmaWork = mA * (mS / 2);
+        const meetingWork = tD * 0.7;
+        const totalValue = normalWork + mmaWork + meetingWork;
 
-        const vBox = document.getElementById('verimColor');
-        const durum = verimlilik >= 65 ? "BAŞARILI ✅" : "HEDEF ALTI ⚠️";
-        vBox.style.background = verimlilik >= 65 ? "#27ae60" : "#c0392b";
+        const currentRatio = (totalValue / 540) * 100;
+        const netIdle = gecenMesai - totalValue;
+        const remainingMola = 75 - netIdle;
 
-        // Paylaşım metnini hazırla
-        sonSkor = `📊 QA Performans Raporu\n--------------------------\n📈 Verimlilik: %${verimlilik.toFixed(1)}\n⏱ Geçen Mesai: ${gecenMesai} dk\n☕ Boşta/Mola: ${bosDk.toFixed(0)} dk\n📝 Durum: ${durum}\n--------------------------\n#NetCC #QA`;
-    }
+        // Projeksiyon (Mevcut hızla giderse ne olur?)
+        const workPerMinute = totalValue / gecenMesai;
+        const projectedFinal = ((totalValue + (workPerMinute * kalanMesai)) / 540) * 100;
 
-    async function paylas() {
-        if (navigator.share) {
-            try {
-                await navigator.share({ title: 'QA Verimlilik', text: sonSkor });
-            } catch (err) {
-                kopyala();
-            }
+        // UI Güncelleme
+        document.getElementById('vRatio').innerText = "%" + currentRatio.toFixed(1);
+        document.getElementById('vRatio').style.color = currentRatio >= 65 ? "#00ff00" : "#ff3b30";
+        document.getElementById('vMola').innerText = (remainingMola > 0 ? remainingMola.toFixed(0) : 0) + " dk";
+        document.getElementById('vProj').innerText = "%" + (projectedFinal > 0 ? projectedFinal.toFixed(1) : 0);
+
+        // Derin Log Algoritması
+        let logs = [];
+        if(currentRatio < 65) {
+            const missing = (540 * 0.65) - totalValue;
+            const needed = Math.ceil(missing / (nS + 2 || 10));
+            logs.push(`⚠️ <span class="trend-down">HEDEF ALTI:</span> %65 eşiği için <span style="color:white">${needed} adet</span> daha normal çağrı analizi gerekli.`);
         } else {
-            kopyala();
+            logs.push(`✅ <span class="trend-up">HEDEF UYUMLU:</span> Mevcut tempoda mesai sonunda %${projectedFinal.toFixed(1)} skora ulaşacaksınız.`);
         }
-    }
 
-    function kopyala() {
-        navigator.clipboard.writeText(sonSkor);
-        alert("Rapor panoya kopyalandı! İstediğin yere yapıştırabilirsin.");
+        if(remainingMola < 0) {
+            logs.push(`🚨 <span class="trend-down">MOLA İHLALİ:</span> Tanımlı mola süresini ${Math.abs(remainingMola).toFixed(0)} dakika aştınız.`);
+        } else if(remainingMola < 15) {
+            logs.push(`🟡 <span style="color:orange">DİKKAT:</span> Mola bakiyeniz tükenmek üzere (${remainingMola.toFixed(0)} dk kaldı).`);
+        }
+
+        if(nA > 0 && nS > 15) {
+            logs.push(`🐢 <span style="color:cyan">HIZ ANALİZİ:</span> Analiz süreniz ortalamanın üzerinde, biraz daha seri olabilirsiniz.`);
+        }
+
+        document.getElementById('logText').innerHTML = logs.map(l => `<div style="margin-bottom:8px;">• ${l}</div>`).join('');
+        document.getElementById('vStatus').innerText = currentRatio >= 65 ? "OPTIMAL PERFORMANCE" : "ACTION REQUIRED";
+        document.getElementById('vStatus').style.color = currentRatio >= 65 ? "#00ff00" : "#ff3b30";
     }
 </script>
 
