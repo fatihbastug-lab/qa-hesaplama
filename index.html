@@ -20,7 +20,10 @@
         .section { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); text-align: left; }
         label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--primary); text-transform: uppercase; }
         input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; background: var(--bg); color: var(--text); outline: none; }
+        
         button { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 5px; }
+        .btn-share { background: #27ae60; display: none; margin-top: 15px; }
+        
         .results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
         .res-card { padding: 12px; border-radius: 10px; color: white; text-align: center; }
         .val { font-size: 18px; font-weight: bold; display: block; }
@@ -35,7 +38,7 @@
     <h2 style="font-size: 18px; margin-bottom: 15px;">Verimlilik Takibi</h2>
     
     <div class="info-bar">
-        <span>🕒 Mesai: 08:30 - 18:45</span>
+        <span>🕒 08:30 - 18:45</span>
         <span>☕ Toplam: 615 dk</span>
         <span>🤝 Toplantı Verimi: %70</span>
         <span>🎯 Hedef Verim: %65</span>
@@ -63,11 +66,12 @@
     </div>
 
     <button onclick="hesapla()">ANLIK DURUMU ANALİZ ET</button>
+    <button id="shareBtn" class="btn-share" onclick="paylas()">📊 ANALİZİ PAYLAŞ</button>
 
     <div id="results" class="results">
         <div class="res-card" id="verimColor" style="grid-column: span 2; padding: 15px;">
             <span id="resVerim" class="val">%0</span>
-            <span class="lbl">ANLIK VERİMLİLİK (08:30'DAN BERİ)</span>
+            <span class="lbl">ANLIK VERİMLİLİK</span>
         </div>
         <div class="res-card" style="background: #27ae60;">
             <span id="resUretim" class="val">0 dk</span>
@@ -88,6 +92,8 @@
 </div>
 
 <script>
+    let sonRapor = "";
+
     function toggleTheme() {
         const body = document.body;
         body.dataset.theme = body.dataset.theme === "light" ? "dark" : "light";
@@ -117,14 +123,13 @@
         const verimlilik = (uretim / gecenMesai) * 100;
         const molaKayiP = gecenMesai - uretim;
 
-        // Hedef Hesaplama (%65 verim için gün sonunda toplam ne kadar iş üretilmeli?)
-        // Toplam Mesai 615 dk * 0.65 = 400 dk üretim lazım.
         const gunlukHedefUretim = 615 * 0.65;
         const gerekenEkUretim = Math.max(0, gunlukHedefUretim - uretim);
 
         // UI Güncelleme
         document.getElementById('results').style.display = 'grid';
         document.getElementById('targetBox').style.display = 'block';
+        document.getElementById('shareBtn').style.display = 'block';
         
         document.getElementById('resVerim').innerText = "%" + verimlilik.toFixed(1);
         document.getElementById('resUretim').innerText = uretim.toFixed(0) + " dk";
@@ -134,19 +139,39 @@
         document.getElementById('gerekenIs').innerText = gerekenEkUretim.toFixed(0);
 
         const vBox = document.getElementById('verimColor');
+        const durum = verimlilik >= 65 ? "BAŞARILI ✅" : "HEDEF ALTI ⚠️";
         vBox.style.background = verimlilik >= 65 ? "#27ae60" : "#c0392b";
 
-        // Tavsiye Metni
+        // Tavsiye Metni ve Rapor Hazırlama
         const tavsiyeElt = document.getElementById('tavsiye');
+        let tavsiyeMetni = "";
+        
         if (kalanMesai <= 0) {
-            tavsiyeElt.innerText = "Mesai bitti. İyi dinlenmeler!";
+            tavsiyeMetni = "Mesai bitti. İyi dinlenmeler!";
         } else if (uretim >= gunlukHedefUretim) {
-            tavsiyeElt.innerText = "Tebrikler! Günlük hedefi şimdiden yakaladın.";
+            tavsiyeMetni = "Tebrikler! Günlük hedefi yakaladın.";
         } else {
-            const ortSure = nS || 8; // Eğer süre girilmediyse 8 dk varsayalım
+            const ortSure = nS || 8;
             const kalanAdet = Math.ceil(gerekenEkUretim / (ortSure + 2));
-            tavsiyeElt.innerText = `Hedef için kalan sürede yaklaşık ${kalanAdet} normal işlem daha yapmalısın.`;
+            tavsiyeMetni = `Hedef için ~${kalanAdet} işlem daha gerekli.`;
         }
+        tavsiyeElt.innerText = tavsiyeMetni;
+
+        // Paylaşım için metin oluştur
+        sonRapor = `📊 VERİMLİLİK ANALİZİ\n--------------------------\n📈 Anlık Verim: %${verimlilik.toFixed(1)}\n🛠 Üretilen İş: ${uretim.toFixed(0)} dk\n☕ Mola/Kayıp: ${(molaKayiP > 0 ? molaKayiP.toFixed(0) : 0)} dk\n⏳ Kalan Mesai: ${kalanMesai} dk\n🎯 Hedef Durumu: ${durum}\n💡 Tavsiye: ${tavsiyeMetni}\n--------------------------\n#NetCC #Verimlilik`;
+    }
+
+    async function paylas() {
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: 'Verimlilik Analizi', text: sonRapor });
+            } catch (err) { kopyala(); }
+        } else { kopyala(); }
+    }
+
+    function kopyala() {
+        navigator.clipboard.writeText(sonRapor);
+        alert("Analiz panoya kopyalandı!");
     }
 </script>
 </body>
