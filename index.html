@@ -2,166 +2,178 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>NET CC | QA Deep Intelligence</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NET CC | QA Intelligence & Deep Analytics</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root { 
             --primary: #ff3b30; --accent: #bc13fe; --bg: #050507; 
-            --card-bg: rgba(15, 15, 20, 0.98); --border: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(18, 18, 24, 0.95); --text: #e0e0e0; --border: rgba(255, 255, 255, 0.07);
         }
-        body { 
-            font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; 
-            display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0;
-            background-image: radial-gradient(circle at 0% 0%, #1a0a0a 0%, #050507 50%);
+        [data-theme="light"] {
+            --primary: #cc0000; --accent: #6200ea; --bg: #f0f2f5; 
+            --card-bg: #ffffff; --text: #222; --border: #ddd;
         }
-        .container { width: 95%; max-width: 1000px; display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
-        
-        /* Sol Kontrol Paneli */
-        .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
-        .logo { font-family: 'Orbitron'; font-size: 18px; color: var(--primary); letter-spacing: 3px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 10px; color: #666; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
-        input { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: #fff; font-family: 'Orbitron'; box-sizing: border-box; }
-        input:focus { border-color: var(--primary); outline: none; background: rgba(255,59,48,0.05); }
 
-        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; font-weight: 700; margin-top: 10px; }
-        button:hover { filter: brightness(1.2); box-shadow: 0 0 15px rgba(255,59,48,0.4); }
-
-        /* Sağ Analiz Dashboard */
-        .main-display { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .bento { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; position: relative; }
-        .full { grid-column: span 2; }
+        body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 20px; transition: 0.5s; background-image: radial-gradient(circle at 50% 0%, rgba(255, 59, 48, 0.08) 0%, transparent 50%); }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); width: 100%; max-width: 600px; border: 1px solid var(--border); backdrop-filter: blur(15px); }
         
-        .val-big { font-family: 'Orbitron'; font-size: 60px; font-weight: 700; line-height: 1; margin: 10px 0; }
-        .val-mid { font-family: 'Orbitron'; font-size: 24px; color: var(--accent); }
-        .desc { font-size: 11px; color: #555; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        .header-main { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .logo-container img { max-width: 100px; }
+        .terminal-title { font-family: 'Orbitron', sans-serif; font-size: 12px; letter-spacing: 2px; color: var(--primary); }
 
-        #intelligence-log { 
-            grid-column: span 2; background: rgba(188, 19, 254, 0.03); 
-            border: 1px dashed var(--accent); padding: 15px; font-size: 13px; color: #aaa; min-height: 80px;
-        }
-        .trend-up { color: #00ff00; }
-        .trend-down { color: #ff3b30; }
+        .info-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; font-size: 9px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; color: #777; }
+        
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .input-group { background: rgba(255,255,255,0.02); padding: 12px; border-radius: 12px; border-left: 3px solid var(--primary); }
+        label { display: block; font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 5px; }
+        input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); color: #fff; font-family: 'Orbitron'; font-size: 16px; padding: 5px 0; outline: none; }
+        
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-family: 'Orbitron'; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-bottom: 15px; }
+        button:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 59, 48, 0.4); }
+
+        .deep-results { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; display: none; }
+        .res-box { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; border: 1px solid var(--border); }
+        .hero-res { grid-column: span 2; text-align: center; padding: 25px; border: 1px solid var(--primary); background: rgba(255, 59, 48, 0.05); }
+        
+        .val { font-family: 'Orbitron'; font-size: 28px; display: block; font-weight: 700; }
+        .lbl { font-size: 10px; text-transform: uppercase; color: #666; font-weight: bold; }
+
+        #deepAnalysisLog { margin-top: 20px; padding: 20px; border-radius: 15px; background: rgba(188, 19, 254, 0.05); border: 1px solid rgba(188, 19, 254, 0.2); font-size: 13px; line-height: 1.6; }
+        .log-item { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px; }
+        .dot { height: 6px; width: 6px; background: var(--accent); border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
-<div class="container">
-    <div class="panel">
-        <div class="logo">NET CC<br><small style="font-size: 8px;">INTELLIGENCE v3</small></div>
-        
-        <div class="input-group">
-            <label>Normal (Adet | Ort. Sn)</label>
-            <div style="display:flex; gap:5px;">
-                <input type="number" id="nA" placeholder="Adet">
-                <input type="number" id="nS" placeholder="Sn">
-            </div>
-        </div>
-        
-        <div class="input-group">
-            <label>MMA (Adet | Ort. Sn)</label>
-            <div style="display:flex; gap:5px;">
-                <input type="number" id="mA" placeholder="Adet">
-                <input type="number" id="mS" placeholder="Sn">
-            </div>
-        </div>
-        
-        <div class="input-group">
-            <label>Eğitim / Toplantı (Dakika)</label>
-            <input type="number" id="tD" placeholder="Toplam dk">
-        </div>
-        
-        <button onclick="deepCalculate()">DERİN ANALİZİ ÇALIŞTIR</button>
+<div class="card">
+    <div class="header-main">
+        <div class="logo-container"><img src="netcc.png" alt="NET CC"></div>
+        <div class="terminal-title">DEEP ANALYSIS ENGINE v2.0</div>
     </div>
 
-    <div class="main-display">
-        <div class="bento full" style="text-align:center; border-bottom: 3px solid var(--primary);">
-            <div class="desc">Gerçek Zamanlı Verimlilik</div>
-            <div class="val-big" id="vRatio">%0</div>
-            <div id="vStatus" style="font-size: 12px; font-weight: 700;">SİSTEM BEKLEMEDE</div>
-        </div>
+    <div class="info-bar">
+        <div>BAS: 08:30</div>
+        <div>BIT: 18:45</div>
+        <div>MOLA: 75dk</div>
+        <div>HEDEF: %65</div>
+    </div>
 
-        <div class="bento">
-            <div class="desc">Kalan Mola Bakiyesi</div>
-            <div class="val-mid" id="vMola">75 <small style="font-size:10px">dk</small></div>
-            <div id="vMolaStatus" style="font-size: 10px; color:#444;">HAKKINIZ VAR</div>
+    <div class="input-grid">
+        <div class="input-group">
+            <label>Normal Çağrı (Adet)</label>
+            <input type="number" id="nA" placeholder="0">
         </div>
+        <div class="input-group">
+            <label>Normal (Ort. Sn)</label>
+            <input type="number" id="nS" placeholder="0">
+        </div>
+        <div class="input-group" style="border-left-color: var(--accent);">
+            <label>MMA (Adet)</label>
+            <input type="number" id="mA" placeholder="0">
+        </div>
+        <div class="input-group" style="border-left-color: var(--accent);">
+            <label>MMA (Ort. Sn)</label>
+            <input type="number" id="mS" placeholder="0">
+        </div>
+        <div class="input-group" style="grid-column: span 2; border-left-color: #f1c40f;">
+            <label>Toplantı / Eğitim (Dakika)</label>
+            <input type="number" id="tD" placeholder="0">
+        </div>
+    </div>
 
-        <div class="bento">
-            <div class="desc">Gün Sonu Projeksiyonu</div>
-            <div class="val-mid" id="vProj">%0</div>
-            <div style="font-size: 10px; color:#444;">TAHMİNİ SKOR</div>
-        </div>
+    <button onclick="deepRun()">DERİN ANALİZİ BAŞLAT</button>
 
-        <div id="intelligence-log">
-            <div class="desc" style="color: var(--accent); margin-bottom: 10px;">🧠 Analitik Çıkarımlar</div>
-            <div id="logText">Veri girişi yapıldığında yapay zeka analizi burada görünecektir.</div>
+    <div class="deep-results" id="results">
+        <div class="res-box hero-res">
+            <span class="val" id="vVerim">%0</span>
+            <span class="lbl">VERİMLİLİK ENDEKSİ</span>
         </div>
+        <div class="res-box">
+            <span class="val" id="vBos">0</span>
+            <span class="lbl">NET BOŞTA (DK)</span>
+        </div>
+        <div class="res-box">
+            <span class="val" id="vMola" style="color: var(--accent);">0</span>
+            <span class="lbl">KALAN MOLA (DK)</span>
+        </div>
+        <div class="res-box">
+            <span class="val" id="vKalan">0</span>
+            <span class="lbl">KALAN MESAİ (DK)</span>
+        </div>
+        <div class="res-box">
+            <span class="val" id="vTahmin">%0</span>
+            <span class="lbl">GÜN SONU TAHMİNİ</span>
+        </div>
+    </div>
+
+    <div id="deepAnalysisLog" style="display:none;">
+        <strong><span style="color:var(--accent)">[INTELLIGENCE LOG]</span></strong>
+        <div id="logContent"></div>
     </div>
 </div>
 
 <script>
-    function deepCalculate() {
-        // Girdiler
+    function deepRun() {
         const nA = parseFloat(document.getElementById('nA').value) || 0;
         const nS = parseFloat(document.getElementById('nS').value) || 0;
         const mA = parseFloat(document.getElementById('mA').value) || 0;
         const mS = parseFloat(document.getElementById('mS').value) || 0;
         const tD = parseFloat(document.getElementById('tD').value) || 0;
 
-        // Zaman Tanımları
         const simdi = new Date();
         const bas = new Date(); bas.setHours(8, 30, 0);
         const bit = new Date(); bit.setHours(18, 45, 0);
         
         let gecenMesai = (simdi - bas) / 1000 / 60;
-        if(gecenMesai < 0) gecenMesai = 0; if(gecenMesai > 615) gecenMesai = 615;
+        if (gecenMesai < 0) gecenMesai = 0; if (gecenMesai > 615) gecenMesai = 615;
         let kalanMesai = 615 - gecenMesai;
 
-        // Analiz Motoru
-        const normalWork = (nA * nS) + (nA * 2);
-        const mmaWork = mA * (mS / 2);
-        const meetingWork = tD * 0.7;
-        const totalValue = normalWork + mmaWork + meetingWork;
+        const normalIs = (nA * nS) + (nA * 2);
+        const mmaIs = mA * (mS / 2);
+        const toplantiVerim = tD * 0.70;
+        const toplamIs = normalIs + mmaIs + toplantiVerim;
 
-        const currentRatio = (totalValue / 540) * 100;
-        const netIdle = gecenMesai - totalValue;
-        const remainingMola = 75 - netIdle;
+        const verim = (toplamIs / 540) * 100;
+        const netBos = gecenMesai - toplamIs;
+        const kalanMola = 75 - netBos;
+        
+        // Gün Sonu Tahmini (Mevcut hızla giderse)
+        const isHizi = toplamIs / gecenMesai; // dk/dk
+        const tahminVerim = ((toplamIs + (isHizi * kalanMesai)) / 540) * 100;
 
-        // Projeksiyon (Mevcut hızla giderse ne olur?)
-        const workPerMinute = totalValue / gecenMesai;
-        const projectedFinal = ((totalValue + (workPerMinute * kalanMesai)) / 540) * 100;
+        // UI
+        document.getElementById('results').style.display = 'grid';
+        document.getElementById('deepAnalysisLog').style.display = 'block';
+        
+        document.getElementById('vVerim').innerText = "%" + verim.toFixed(1);
+        document.getElementById('vVerim').style.color = verim >= 65 ? "#00ff00" : "#ff3b30";
+        document.getElementById('vBos').innerText = netBos > 0 ? netBos.toFixed(0) : 0;
+        document.getElementById('vMola').innerText = kalanMola.toFixed(0);
+        document.getElementById('vKalan').innerText = (kalanMesai > 0 ? kalanMesai : 0).toFixed(0);
+        document.getElementById('vTahmin').innerText = "%" + (tahminVerim > 0 ? tahminVerim.toFixed(1) : "0");
 
-        // UI Güncelleme
-        document.getElementById('vRatio').innerText = "%" + currentRatio.toFixed(1);
-        document.getElementById('vRatio').style.color = currentRatio >= 65 ? "#00ff00" : "#ff3b30";
-        document.getElementById('vMola').innerText = (remainingMola > 0 ? remainingMola.toFixed(0) : 0) + " dk";
-        document.getElementById('vProj').innerText = "%" + (projectedFinal > 0 ? projectedFinal.toFixed(1) : 0);
-
-        // Derin Log Algoritması
+        // Derin Analiz Yorumları
         let logs = [];
-        if(currentRatio < 65) {
-            const missing = (540 * 0.65) - totalValue;
-            const needed = Math.ceil(missing / (nS + 2 || 10));
-            logs.push(`⚠️ <span class="trend-down">HEDEF ALTI:</span> %65 eşiği için <span style="color:white">${needed} adet</span> daha normal çağrı analizi gerekli.`);
+        if (verim < 65) {
+            const eksik = (540 * 0.65) - toplamIs;
+            const gerekenCagri = Math.ceil(eksik / (nS + 2 || 8));
+            logs.push(`⚠️ Hedefin <span style="color:red">%${(65 - verim).toFixed(1)}</span> altındasınız. Mesai bitmeden <span style="color:white">+${gerekenCagri}</span> çağrı daha bakmalısınız.`);
         } else {
-            logs.push(`✅ <span class="trend-up">HEDEF UYUMLU:</span> Mevcut tempoda mesai sonunda %${projectedFinal.toFixed(1)} skora ulaşacaksınız.`);
+            logs.push(`✅ Hedef yakalandı. Mevcut hızla giderseniz gün sonunda <span style="color:#00ff00">%${tahminVerim.toFixed(1)}</span> verimliliğe ulaşacaksınız.`);
         }
 
-        if(remainingMola < 0) {
-            logs.push(`🚨 <span class="trend-down">MOLA İHLALİ:</span> Tanımlı mola süresini ${Math.abs(remainingMola).toFixed(0)} dakika aştınız.`);
-        } else if(remainingMola < 15) {
-            logs.push(`🟡 <span style="color:orange">DİKKAT:</span> Mola bakiyeniz tükenmek üzere (${remainingMola.toFixed(0)} dk kaldı).`);
+        if (netBos > 75) {
+            logs.push(`🚨 Mola hakkınız <span style="color:red">${(netBos - 75).toFixed(0)} dk</span> aşıldı! Boşta kalma süreniz kritik seviyede.`);
+        } else {
+            logs.push(`☕ Henüz <span style="color:#00ff00">${kalanMola.toFixed(0)} dk</span> mola hakkınız bulunuyor.`);
         }
 
-        if(nA > 0 && nS > 15) {
-            logs.push(`🐢 <span style="color:cyan">HIZ ANALİZİ:</span> Analiz süreniz ortalamanın üzerinde, biraz daha seri olabilirsiniz.`);
+        if (nA > 0 && (toplamIs / (nA + mA)) > 15) {
+            logs.push(`🐢 Analiz hızınız ortalamadan yavaş. Çağrı başına odaklanma sürenizi kontrol edin.`);
         }
 
-        document.getElementById('logText').innerHTML = logs.map(l => `<div style="margin-bottom:8px;">• ${l}</div>`).join('');
-        document.getElementById('vStatus').innerText = currentRatio >= 65 ? "OPTIMAL PERFORMANCE" : "ACTION REQUIRED";
-        document.getElementById('vStatus').style.color = currentRatio >= 65 ? "#00ff00" : "#ff3b30";
+        document.getElementById('logContent').innerHTML = logs.map(l => `<div class="log-item"><div class="dot"></div>${l}</div>`).join('');
     }
 </script>
 
