@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Verimlilik Hesaplayıcı</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 20px; background: #f4f7f6; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background: #219150; }
+        #result { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; text-align: center; }
+        .score { font-size: 24px; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>QA Verimlilik</h2>
+    <div class="input-group">
+        <label>Dinlenen Çağrı Sayısı</label>
+        <input type="number" id="cagriSayisi" placeholder="Örn: 40">
+    </div>
+    <div class="input-group">
+        <label>Ort. Dinleme Süresi (Dakika)</label>
+        <input type="number" id="ortSure" placeholder="Örn: 6.5">
+    </div>
+    <button onclick="hesapla()">Hesapla</button>
+
+    <div id="result">
+        <div id="text"></div>
+        <div id="score" class="score"></div>
+    </div>
+</div>
+
+<script>
+    function hesapla() {
+        const n = parseFloat(document.getElementById('cagriSayisi').value);
+        const t = parseFloat(document.getElementById('ortSure').value);
+        
+        if (isNaN(n) || isNaN(t)) {
+            alert("Lütfen tüm alanları doldurun!");
+            return;
+        }
+
+        // Senin formülün: (Sayı * Süre + Sayı * 2) / 540
+        const toplamIs = (n * t) + (n * 2);
+        const oran = (toplamIs / 540) * 100;
+
+        const resDiv = document.getElementById('result');
+        const scoreDiv = document.getElementById('score');
+        const textDiv = document.getElementById('text');
+
+        resDiv.style.display = 'block';
+        textDiv.innerText = "Günlük Kapasite Kullanımı:";
+        scoreDiv.innerText = "%" + oran.toFixed(2);
+        
+        // Renk geri bildirimi
+        if (oran > 100) { resDiv.style.background = '#e8f5e9'; scoreDiv.style.color = '#2e7d32'; }
+        else if (oran > 70) { resDiv.style.background = '#fff3e0'; scoreDiv.style.color = '#ef6c00'; }
+        else { resDiv.style.background = '#ffebee'; scoreDiv.style.color = '#c62828'; }
+    }
+</script>
+
+</body>
+</html>
