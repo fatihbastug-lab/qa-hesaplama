@@ -3,106 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verimlilik Takibi Pro - Multi</title>
+    <title>Verimlilik Pro - İsim Seçmeli</title>
     <style>
         :root { 
             --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
             --card-bg: #ffffff; --text: #333333; --border: #eeeeee;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
-        /* Sekme Sistemi */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 900px; }
-        .tab-btn { flex: 1; padding: 15px; background: #ddd; border: none; cursor: pointer; border-radius: 10px; font-weight: bold; transition: 0.3s; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 15px; width: 100%; max-width: 1150px; }
+        .tab-btn { flex: 1; padding: 12px; background: #ddd; border: none; cursor: pointer; border-radius: 8px; font-weight: bold; }
         .tab-btn.active { background: var(--primary); color: white; }
 
-        .panel { display: none; width: 100%; max-width: 900px; }
+        .panel { display: none; width: 100%; max-width: 1150px; }
         .panel.active { display: block; }
 
-        /* Ortak Kart Yapısı */
-        .card { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
         
-        /* Çoklu Panel Tablo */
-        .multi-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr; gap: 8px; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-        .multi-header { font-weight: bold; font-size: 12px; color: var(--secondary); text-transform: uppercase; border: none; }
+        .multi-grid { 
+            display: grid; 
+            grid-template-columns: 2fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; 
+            gap: 5px; 
+            align-items: center; 
+            margin-bottom: 5px; 
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .multi-header { font-weight: bold; font-size: 11px; color: var(--secondary); text-align: center; background: #ececec; border-radius: 5px; }
         
-        input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; font-size: 13px; box-sizing: border-box; }
-        .res-badge { padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; background: #eee; font-size: 14px; }
+        input, select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; box-sizing: border-box; background: #fff; }
         
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        button { padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-main { background: var(--secondary); color: white; flex: 2; }
-        .btn-copy { background: #27ae60; color: white; flex: 1; }
-
+        .res-badge { padding: 8px; border-radius: 5px; text-align: center; font-weight: bold; background: #eee; font-size: 12px; transition: 0.3s; }
         .success { background: #27ae60 !important; color: white; }
         .danger { background: #c0392b !important; color: white; }
         
-        .info-header { text-align: center; margin-bottom: 15px; font-size: 14px; background: #eef2f3; padding: 10px; border-radius: 10px; }
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        button { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-main { background: var(--secondary); color: white; flex: 2; }
+        .btn-copy { background: #27ae60; color: white; flex: 1; }
+        
+        label { font-size: 11px; font-weight: bold; color: var(--primary); display: block; margin-top: 8px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('single')">👤 TEKLİ TAKİP</button>
-        <button class="tab-btn" onclick="switchTab('multi')">👥 ÇOKLU PANEL (12 KİŞİ)</button>
+        <button class="tab-btn" onclick="switchTab('multi')">👥 EKİP PANELİ</button>
     </div>
 
     <div id="single" class="panel active">
-        <div class="card" style="max-width: 500px; margin: auto;">
-            <h2 style="text-align: center;">Bireysel Analiz</h2>
-            <div class="info-header">🕒 08:30 - 18:45 | Hedef: %65</div>
-            <div style="margin-bottom: 15px;">
-                <label style="font-size: 12px; font-weight: bold;">ADET</label>
-                <input type="number" id="sAdet" placeholder="İşlem Adedi">
+        <div class="card" style="max-width: 450px; margin: auto;">
+            <label>PERSONEL SEÇİN</label>
+            <select id="sPersonel" class="name-list"></select>
+            
+            <label>NORMAL İŞLEM</label>
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="sAdet" placeholder="Adet">
+                <input type="number" id="sSure" placeholder="Süre">
             </div>
-            <div style="margin-bottom: 15px;">
-                <label style="font-size: 12px; font-weight: bold;">ORT. SÜRE (DK)</label>
-                <input type="number" id="sSure" placeholder="Dakika">
+
+            <label>EK İŞLEM (Katsayı: 0.5)</label>
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="sEkAdet" placeholder="Adet">
+                <input type="number" id="sEkSure" placeholder="Süre">
             </div>
-            <div style="margin-bottom: 15px;">
-                <label style="font-size: 12px; font-weight: bold;">TOPLANTI (DK)</label>
-                <input type="number" id="sToplanti" placeholder="Toplam Toplantı Süresi">
-            </div>
-            <button class="btn-main" style="width: 100%;" onclick="tekliHesapla()">HESAPLA</button>
-            <div id="singleResult" class="res-badge" style="margin-top: 15px; display: none;">%0</div>
+
+            <label>TOPLANTI (DK)</label>
+            <input type="number" id="sToplanti" placeholder="Dk">
+
+            <button class="btn-main" style="width: 100%; margin-top: 15px;" onclick="tekliHesapla()">HESAPLA</button>
+            <div id="singleResult" class="res-badge" style="margin-top: 15px; display: none; font-size: 16px;">%0</div>
         </div>
     </div>
 
     <div id="multi" class="panel">
         <div class="card">
-            <div class="info-header">🚀 Ekip Verimlilik Paneli - İsim Soyisim Bazlı</div>
-            
             <div class="multi-grid multi-header">
                 <span>İsim Soyisim</span>
-                <span>Adet</span>
-                <span>Süre</span>
-                <span>Toplanti</span>
+                <span>N.Adet</span>
+                <span>N.Süre</span>
+                <span>Ek Adet</span>
+                <span>Ek Süre</span>
+                <span>Top.</span>
                 <span>Verim</span>
             </div>
-
-            <div id="multiRows">
-                </div>
-
+            <div id="multiRows"></div>
             <div class="btn-group">
-                <button class="btn-main" onclick="cokluHesapla()">TÜM EKİBİ ANALİZ ET</button>
+                <button class="btn-main" onclick="cokluHesapla()">EKİBİ ANALİZ ET</button>
                 <button class="btn-copy" onclick="cokluKopyala()">RAPORU KOPYALA</button>
             </div>
         </div>
     </div>
 
 <script>
-    // 12 Satırı Oluştur
-    const multiRows = document.getElementById('multiRows');
-    for (let i = 1; i <= 12; i++) {
-        multiRows.innerHTML += `
-            <div class="multi-grid" id="row-${i}">
-                <input type="text" placeholder="İsim Soyisim" class="m-name">
-                <input type="number" placeholder="Adet" class="m-adet">
-                <input type="number" placeholder="Süre" class="m-sure">
-                <input type="number" placeholder="Top." class="m-toplanti">
-                <div class="res-badge m-res" id="m-res-${i}">%0</div>
-            </div>
-        `;
+    // Görseldeki İsim Listesi
+    const isimler = [
+        "DOGA SUMEYYE SAFAK", "OZLEM BASCAVUSOGULLARI", "FATIH KARADENIZ",
+        "HALIDE PALAVAR", "FATIH BASTUG", "HABIBE KARABIYIK",
+        "GOKSU DANACI", "RUKIYE DEMIRKALE", "YALIN BASBUG",
+        "MUNEVVER YILMAZ", "BERFIN SULTAN DAGLI", "DİĞER"
+    ];
+
+    // Select kutularını ve satırları doldur
+    function listeleriDoldur() {
+        const sSelect = document.getElementById('sPersonel');
+        const mRows = document.getElementById('multiRows');
+        
+        // Tekli select
+        isimler.forEach(isim => {
+            sSelect.innerHTML += `<option value="${isim}">${isim}</option>`;
+        });
+
+        // Çoklu satırlar (12 satır)
+        for (let i = 0; i < 12; i++) {
+            let options = isimler.map((isim, idx) => `<option value="${isim}" ${i===idx ? 'selected' : ''}>${isim}</option>`).join('');
+            
+            mRows.innerHTML += `
+                <div class="multi-grid">
+                    <select class="m-name">${options}</select>
+                    <input type="number" class="m-adet" placeholder="0">
+                    <input type="number" class="m-sure" placeholder="0">
+                    <input type="number" class="m-ek-adet" placeholder="0">
+                    <input type="number" class="m-ek-sure" placeholder="0">
+                    <input type="number" class="m-toplanti" placeholder="0">
+                    <div class="res-badge m-res">%0</div>
+                </div>`;
+        }
     }
 
     function switchTab(tabId) {
@@ -114,55 +141,57 @@
 
     function getGecenMesai() {
         const simdi = new Date();
-        const baslangic = new Date();
-        baslangic.setHours(8, 30, 0);
-        let dk = Math.floor((simdi - baslangic) / 1000 / 60);
+        const bas = new Date(); bas.setHours(8, 30, 0);
+        let dk = Math.floor((simdi - bas) / 1000 / 60);
         return Math.max(1, Math.min(dk, 615));
+    }
+
+    function hesapla(nA, nS, eA, eS, tDk) {
+        const uretim = (nA * nS) + (nA * 2) + (eA * (eS * 0.5)) + (tDk * 0.70);
+        return ((uretim / getGecenMesai()) * 100).toFixed(1);
     }
 
     function tekliHesapla() {
         const nA = parseFloat(document.getElementById('sAdet').value) || 0;
         const nS = parseFloat(document.getElementById('sSure').value) || 0;
+        const eA = parseFloat(document.getElementById('sEkAdet').value) || 0;
+        const eS = parseFloat(document.getElementById('sEkSure').value) || 0;
         const tDk = parseFloat(document.getElementById('sToplanti').value) || 0;
         
-        const uretim = (nA * nS) + (nA * 2) + (tDk * 0.70);
-        const verim = ((uretim / getGecenMesai()) * 100).toFixed(1);
-        
+        const verim = hesapla(nA, nS, eA, eS, tDk);
         const res = document.getElementById('singleResult');
         res.style.display = 'block';
-        res.innerText = `ANLIK VERİM: %${verim}`;
+        res.innerText = `%${verim}`;
         res.className = verim >= 65 ? 'res-badge success' : 'res-badge danger';
     }
 
     function cokluHesapla() {
-        const rows = document.querySelectorAll('#multiRows .multi-grid');
-        const dk = getGecenMesai();
-
-        rows.forEach(row => {
-            const nA = parseFloat(row.querySelector('.m-adet').value) || 0;
-            const nS = parseFloat(row.querySelector('.m-sure').value) || 0;
-            const tDk = parseFloat(row.querySelector('.m-toplanti').value) || 0;
-
-            const uretim = (nA * nS) + (nA * 2) + (tDk * 0.70);
-            const verim = ((uretim / dk) * 100).toFixed(1);
-
+        document.querySelectorAll('#multiRows .multi-grid').forEach(row => {
+            const v = hesapla(
+                parseFloat(row.querySelector('.m-adet').value) || 0,
+                parseFloat(row.querySelector('.m-sure').value) || 0,
+                parseFloat(row.querySelector('.m-ek-adet').value) || 0,
+                parseFloat(row.querySelector('.m-ek-sure').value) || 0,
+                parseFloat(row.querySelector('.m-toplanti').value) || 0
+            );
             const badge = row.querySelector('.m-res');
-            badge.innerText = `%${verim}`;
-            badge.className = verim >= 65 ? 'res-badge m-res success' : (verim > 0 ? 'res-badge m-res danger' : 'res-badge m-res');
+            badge.innerText = `%${v}`;
+            badge.className = v >= 65 ? 'res-badge m-res success' : (v > 0 ? 'res-badge m-res danger' : 'res-badge m-res');
         });
     }
 
     function cokluKopyala() {
-        let rapor = "📊 EKİP VERİMLİLİK RAPORU\n------------------------\n";
+        let r = "📊 EKİP VERİMLİLİK RAPORU\n------------------------\n";
         document.querySelectorAll('#multiRows .multi-grid').forEach(row => {
-            const name = row.querySelector('.m-name').value || "Belirtilmedi";
-            const verim = row.querySelector('.m-res').innerText;
-            if(verim !== "%0") rapor += `• ${name}: ${verim}\n`;
+            const n = row.querySelector('.m-name').value;
+            const v = row.querySelector('.m-res').innerText;
+            if(v !== "%0") r += `• ${n}: ${v}\n`;
         });
-        navigator.clipboard.writeText(rapor);
-        alert("Rapor panoya kopyalandı!");
+        navigator.clipboard.writeText(r);
+        alert("Rapor kopyalandı!");
     }
-</script>
 
+    listeleriDoldur();
+</script>
 </body>
 </html>
