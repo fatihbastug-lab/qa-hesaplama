@@ -1,201 +1,178 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verimlilik Takibi Pro - Final</title>
-    <style>
-        :root { --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; --card-bg: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .info-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #fff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); width: 100%; max-width: 1200px; margin-bottom: 15px; font-size: 13px; }
-        .tabs { display: flex; gap: 8px; margin-bottom: 15px; width: 100%; max-width: 1200px; }
-        .tab-btn { flex: 1; padding: 12px; background: #ddd; border: none; cursor: pointer; border-radius: 8px; font-weight: bold; }
-        .tab-btn.active { background: var(--primary); color: white; }
-        .panel { display: none; width: 100%; max-width: 1200px; }
-        .panel.active { display: block; }
-        .card { background: var(--card-bg); padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .multi-grid { display: grid; grid-template-columns: 1.5fr 0.6fr 0.6fr 0.6fr 0.6fr 0.6fr 0.8fr 1.2fr; gap: 5px; align-items: center; padding: 8px; border-bottom: 1px solid #eee; }
-        .multi-header { font-weight: bold; font-size: 10px; text-align: center; background: #ececec; border-radius: 5px; padding: 10px; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 12px; text-align: center; }
-        .res-badge { padding: 8px; border-radius: 5px; text-align: center; font-weight: bold; background: #eee; font-size: 12px; }
-        .success { background: #27ae60 !important; color: white; }
-        .danger { background: #c0392b !important; color: white; }
-        .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        button { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .btn-main { background: var(--secondary); color: white; flex: 2; }
-        .btn-excel { background: #1f7244; color: white; flex: 1; }
-        .btn-share { background: #3498db; color: white; flex: 1; }
-        .m-detay { font-size: 10px; color: #666; text-align: center; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verimlilik Takibi Pro</title>
+    <style>
+        :root { 
+            --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
+            --card-bg: #ffffff; --text: #333333; --border: #eeeeee;
+        }
+        [data-theme="dark"] {
+            --primary: #ff4d4d; --secondary: #ecf0f1; --bg: #1a1a1a; 
+            --card-bg: #2d2d2d; --text: #f4f4f4; --border: #444444;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 20px; transition: 0.3s; }
+        .card { background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 500px; position: relative; text-align: center; }
+        .theme-switch { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 20px; }
+        .info-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; }
+        .section { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--primary); text-align: left; }
+        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--primary); text-transform: uppercase; }
+        input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; background: var(--bg); color: var(--text); outline: none; }
+        
+        button { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 5px; }
+        .btn-share { background: #27ae60; display: none; margin-top: 15px; }
+        
+        .results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
+        .res-card { padding: 12px; border-radius: 10px; color: white; text-align: center; }
+        .val { font-size: 18px; font-weight: bold; display: block; }
+        .lbl { font-size: 9px; text-transform: uppercase; font-weight: bold; }
+        #targetBox { margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.03); border-radius: 10px; text-align: left; font-size: 13px; line-height: 1.5; border: 1px solid var(--border); }
+    </style>
 </head>
-<body>
+<body data-theme="light">
 
-    <div class="info-bar">
-        <div>🕒 Mesai: <b>08:30 - 18:45</b></div>
-        <div>☕ Toplam: <b>615 dk</b></div>
-        <div>🤝 Topl. Verimi: <b>%70</b></div>
-        <div>🎯 Hedef Verim: <b>%65</b></div>
-    </div>
+<div class="card">
+    <div class="theme-switch" onclick="toggleTheme()">🌓</div>
+    <h2 style="font-size: 18px; margin-bottom: 15px;">Verimlilik Takibi</h2>
+    
+    <div class="info-bar">
+        <span>🕒 08:30 - 18:45</span>
+        <span>☕ Toplam: 615 dk</span>
+        <span>🤝 Toplantı Verimi: %70</span>
+        <span>🎯 Hedef Verim: %65</span>
+    </div>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('single')">👤 TEKLİ TAKİP</button>
-        <button class="tab-btn" onclick="switchTab('multi')">👥 EKİP PANELİ</button>
-    </div>
+    <div class="section">
+        <label>Normal İşlem Takibi</label>
+        <div style="display: flex; gap: 8px;">
+            <input type="number" id="nAdet" placeholder="Adet" inputmode="decimal">
+            <input type="number" id="nSure" placeholder="Ort. Süre" inputmode="decimal">
+        </div>
+    </div>
 
-    <div id="single" class="panel active">
-        <div class="card" style="max-width: 500px; margin: auto;">
-            <select id="sPersonel" style="margin-bottom:10px;"></select>
-            <input type="number" id="sAdet" placeholder="Normal Adet" style="margin-bottom:5px;">
-            <input type="number" id="sSure" placeholder="Normal Süre" style="margin-bottom:5px;">
-            <input type="number" id="sEkAdet" placeholder="Ek İşlem Adet" style="margin-bottom:5px;">
-            <input type="number" id="sEkSure" placeholder="Ek İşlem Süre" style="margin-bottom:5px;">
-            <input type="number" id="sToplanti" placeholder="Toplantı (dk)">
-            <button class="btn-main" style="width:100%; margin-top:15px;" onclick="tekliHesapla()">HESAPLA</button>
-            <div id="sFullResult" style="display:none; margin-top:15px; text-align: center;">
-                <div id="sBadge" class="res-badge" style="font-size: 18px; padding: 15px;">%0</div>
-                <div class="btn-group">
-                    <button class="btn-excel" onclick="tekliExcelIndir()">📊 EXCEL</button>
-                    <button class="btn-share" onclick="tekliPaylas()">📤 PAYLAŞ</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="section" style="border-left-color: #2980b9;">
+        <label>Ek İşlem (Katsayı: 0.5)</label>
+        <div style="display: flex; gap: 8px;">
+            <input type="number" id="mAdet" placeholder="Adet" inputmode="decimal">
+            <input type="number" id="mSure" placeholder="Ort. Süre" inputmode="decimal">
+        </div>
+    </div>
 
-    <div id="multi" class="panel">
-        <div class="card">
-            <div class="multi-grid multi-header">
-                <span>Personel</span><span>N.A</span><span>N.S</span><span>E.A</span><span>E.S</span><span>Top.</span><span>Verim</span><span>Analiz</span>
-            </div>
-            <div id="multiRows"></div>
-            <div class="btn-group">
-                <button class="btn-main" onclick="cokluHesapla()">EKİBİ ANALİZ ET</button>
-                <button class="btn-excel" onclick="cokluExcelIndir()">📊 EXCEL İNDİR</button>
-                <button class="btn-share" onclick="cokluPaylas()">📤 PAYLAŞ</button>
-            </div>
-        </div>
-    </div>
+    <div class="section" style="border-left-color: #f1c40f;">
+        <label>Toplantı / Eğitim (Dakika)</label>
+        <input type="number" id="toplantiDk" placeholder="Toplam Dakika" inputmode="decimal">
+    </div>
+
+    <button onclick="hesapla()">ANLIK DURUMU ANALİZ ET</button>
+    <button id="shareBtn" class="btn-share" onclick="paylas()">📊 ANALİZİ PAYLAŞ</button>
+
+    <div id="results" class="results">
+        <div class="res-card" id="verimColor" style="grid-column: span 2; padding: 15px;">
+            <span id="resVerim" class="val">%0</span>
+            <span class="lbl">ANLIK VERİMLİLİK</span>
+        </div>
+        <div class="res-card" style="background: #27ae60;">
+            <span id="resUretim" class="val">0 dk</span>
+            <span class="lbl">ÜRETİLEN İŞ SÜRESİ</span>
+        </div>
+        <div class="res-card" style="background: #e67e22;">
+            <span id="resMola" class="val">0 dk</span>
+            <span class="lbl">MOLA VE ZAMAN KAYBI</span>
+        </div>
+    </div>
+
+    <div id="targetBox" style="display:none;">
+        <strong>🏁 Kalan Zaman Analizi:</strong><br>
+        • Mesai Bitimine: <span id="kalanMesai">0</span> dk var.<br>
+        • Hedef için gereken ek iş: <span id="gerekenIs">0</span> dk.<br>
+        • <span id="tavsiye">Analiz yapılıyor...</span>
+    </div>
+</div>
 
 <script>
-    const isimler = ["DOGA SUMEYYE SAFAK", "OZLEM BASCAVUSOGULLARI", "FATIH KARADENIZ", "HALIDE PALAVAR", "FATIH BASTUG", "HABIBE KARABIYIK", "GOKSU DANACI", "RUKIYE DEMIRKALE", "YALIN BASBUG", "MUNEVVER YILMAZ", "BERFIN SULTAN DAGLI", "DİĞER"];
+    let sonRapor = "";
 
-    function init() {
-        const sSel = document.getElementById('sPersonel');
-        const mRows = document.getElementById('multiRows');
-        isimler.forEach(n => sSel.innerHTML += `<option value="${n}">${n}</option>`);
-        for (let i = 0; i < 12; i++) {
-            let opts = isimler.map((n, idx) => `<option value="${n}" ${i===idx ? 'selected' : ''}>${n}</option>`).join('');
-            mRows.innerHTML += `
-                <div class="multi-grid">
-                    <select class="m-name">${opts}</select>
-                    <input type="number" class="m-adet" value="0">
-                    <input type="number" class="m-sure" value="0">
-                    <input type="number" class="m-ek-adet" value="0">
-                    <input type="number" class="m-ek-sure" value="0">
-                    <input type="number" class="m-toplanti" value="0">
-                    <div class="res-badge m-res">%0</div>
-                    <div class="m-detay">-</div>
-                </div>`;
-        }
-    }
+    function toggleTheme() {
+        const body = document.body;
+        body.dataset.theme = body.dataset.theme === "light" ? "dark" : "light";
+    }
 
-    function switchTab(t) {
-        document.querySelectorAll('.panel, .tab-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById(t).classList.add('active');
-        event.currentTarget.classList.add('active');
-    }
+    function hesapla() {
+        const nA = parseFloat(document.getElementById('nAdet').value) || 0;
+        const nS = parseFloat(document.getElementById('nSure').value) || 0;
+        const mA = parseFloat(document.getElementById('mAdet').value) || 0;
+        const mS = parseFloat(document.getElementById('mSure').value) || 0;
+        const tDk = parseFloat(document.getElementById('toplantiDk').value) || 0;
 
-    function hesapDetay(nA, nS, eA, eS, tDk) {
-        const simdi = new Date();
-        const bas = new Date(); bas.setHours(8, 30, 0);
-        let gecen = Math.floor((simdi - bas) / 60000);
-        gecen = Math.max(1, Math.min(gecen, 615));
-        const uretim = (nA * nS) + (nA * 2) + (eA * (eS * 0.5)) + (tDk * 0.7);
-        const verim = ((uretim / gecen) * 100).toFixed(1);
-        return { verim, uretim: uretim.toFixed(0) };
-    }
+        const simdi = new Date();
+        const baslangic = new Date();
+        baslangic.setHours(8, 30, 0);
+        const bitis = new Date();
+        bitis.setHours(18, 45, 0);
 
-    function tekliHesapla() {
-        const d = hesapDetay(
-            parseFloat(document.getElementById('sAdet').value)||0, parseFloat(document.getElementById('sSure').value)||0,
-            parseFloat(document.getElementById('sEkAdet').value)||0, parseFloat(document.getElementById('sEkSure').value)||0,
-            parseFloat(document.getElementById('sToplanti').value)||0
-        );
-        document.getElementById('sFullResult').style.display = 'block';
-        const b = document.getElementById('sBadge');
-        b.innerText = `%${d.verim} VERİMLİLİK`;
-        b.className = d.verim >= 65 ? 'res-badge success' : 'res-badge danger';
-    }
+        let gecenMesai = Math.floor((simdi - baslangic) / 1000 / 60);
+        gecenMesai = Math.max(1, Math.min(gecenMesai, 615));
+        
+        let kalanMesai = Math.floor((bitis - simdi) / 1000 / 60);
+        kalanMesai = Math.max(0, kalanMesai);
 
-    function cokluHesapla() {
-        document.querySelectorAll('#multiRows .multi-grid').forEach(row => {
-            const d = hesapDetay(
-                parseFloat(row.querySelector('.m-adet').value)||0, parseFloat(row.querySelector('.m-sure').value)||0,
-                parseFloat(row.querySelector('.m-ek-adet').value)||0, parseFloat(row.querySelector('.m-ek-sure').value)||0,
-                parseFloat(row.querySelector('.m-toplanti').value)||0
-            );
-            const badge = row.querySelector('.m-res');
-            badge.innerText = `%${d.verim}`;
-            badge.className = d.verim >= 65 ? 'res-badge success' : (d.verim > 0 ? 'res-badge danger' : 'res-badge');
-            row.querySelector('.m-detay').innerText = `Üretilen: ${d.uretim} dk`;
-        });
-    }
+        // Üretilen İş Yükü
+        const uretim = (nA * nS) + (nA * 2) + (mA * (mS * 0.5)) + (tDk * 0.70);
+        const verimlilik = (uretim / gecenMesai) * 100;
+        const molaKayiP = gecenMesai - uretim;
 
-    // GÜÇLÜ EXCEL İNDİRME (Unicode/UTF-8)
-    function excelIndir(filename, tableHtml) {
-        const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='UTF-8'></head><body>";
-        const footer = "</body></html>";
-        const blob = new Blob([header + tableHtml + footer], { type: 'application/vnd.ms-excel' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        a.click();
-    }
+        const gunlukHedefUretim = 615 * 0.65;
+        const gerekenEkUretim = Math.max(0, gunlukHedefUretim - uretim);
 
-    function cokluExcelIndir() {
-        let table = "<table border='1'><tr><th>Personel</th><th>Verimlilik</th><th>Detay</th></tr>";
-        document.querySelectorAll('#multiRows .multi-grid').forEach(row => {
-            const v = row.querySelector('.m-res').innerText;
-            if(v !== "%0") {
-                table += `<tr><td>${row.querySelector('.m-name').value}</td><td>${v}</td><td>${row.querySelector('.m-detay').innerText}</td></tr>`;
-            }
-        });
-        table += "</table>";
-        excelIndir("Ekip_Raporu.xls", table);
-    }
+        // UI Güncelleme
+        document.getElementById('results').style.display = 'grid';
+        document.getElementById('targetBox').style.display = 'block';
+        document.getElementById('shareBtn').style.display = 'block';
+        
+        document.getElementById('resVerim').innerText = "%" + verimlilik.toFixed(1);
+        document.getElementById('resUretim').innerText = uretim.toFixed(0) + " dk";
+        document.getElementById('resMola').innerText = (molaKayiP > 0 ? molaKayiP.toFixed(0) : 0) + " dk";
+        
+        document.getElementById('kalanMesai').innerText = kalanMesai;
+        document.getElementById('gerekenIs').innerText = gerekenEkUretim.toFixed(0);
 
-    function tekliExcelIndir() {
-        const isim = document.getElementById('sPersonel').value;
-        const verim = document.getElementById('sBadge').innerText;
-        let table = `<table border='1'><tr><th>Personel</th><th>Verim</th></tr><tr><td>${isim}</td><td>${verim}</td></tr></table>`;
-        excelIndir("Tekli_Rapor.xls", table);
-    }
+        const vBox = document.getElementById('verimColor');
+        const durum = verimlilik >= 65 ? "BAŞARILI ✅" : "HEDEF ALTI ⚠️";
+        vBox.style.background = verimlilik >= 65 ? "#27ae60" : "#c0392b";
 
-    // PAYLAŞMA FONKSİYONU
-    async function paylasimYap(metin) {
-        if (navigator.share) {
-            try { await navigator.share({ title: 'Rapor', text: metin }); } catch {}
-        } else {
-            navigator.clipboard.writeText(metin);
-            alert("Rapor kopyalandı!");
-        }
-    }
+        // Tavsiye Metni ve Rapor Hazırlama
+        const tavsiyeElt = document.getElementById('tavsiye');
+        let tavsiyeMetni = "";
+        
+        if (kalanMesai <= 0) {
+            tavsiyeMetni = "Mesai bitti. İyi dinlenmeler!";
+        } else if (uretim >= gunlukHedefUretim) {
+            tavsiyeMetni = "Tebrikler! Günlük hedefi yakaladın.";
+        } else {
+            const ortSure = nS || 8;
+            const kalanAdet = Math.ceil(gerekenEkUretim / (ortSure + 2));
+            tavsiyeMetni = `Hedef için ~${kalanAdet} işlem daha gerekli.`;
+        }
+        tavsiyeElt.innerText = tavsiyeMetni;
 
-    function cokluPaylas() {
-        let t = "📊 EKİP RAPORU\n";
-        document.querySelectorAll('#multiRows .multi-grid').forEach(row => {
-            const v = row.querySelector('.m-res').innerText;
-            if(v !== "%0") t += `• ${row.querySelector('.m-name').value}: ${v}\n`;
-        });
-        paylasimYap(t);
-    }
+        // Paylaşım için metin oluştur
+        sonRapor = `📊 VERİMLİLİK ANALİZİ\n--------------------------\n📈 Anlık Verim: %${verimlilik.toFixed(1)}\n🛠 Üretilen İş: ${uretim.toFixed(0)} dk\n☕ Mola/Kayıp: ${(molaKayiP > 0 ? molaKayiP.toFixed(0) : 0)} dk\n⏳ Kalan Mesai: ${kalanMesai} dk\n🎯 Hedef Durumu: ${durum}\n💡 Tavsiye: ${tavsiyeMetni}\n--------------------------\n#NetCC #Verimlilik`;
+    }
 
-    function tekliPaylas() {
-        const t = `📊 RAPOR\nPersonel: ${document.getElementById('sPersonel').value}\nVerim: ${document.getElementById('sBadge').innerText}`;
-        paylasimYap(t);
-    }
+    async function paylas() {
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: 'Verimlilik Analizi', text: sonRapor });
+            } catch (err) { kopyala(); }
+        } else { kopyala(); }
+    }
 
-    init();
+    function kopyala() {
+        navigator.clipboard.writeText(sonRapor);
+        alert("Analiz panoya kopyalandı!");
+    }
 </script>
 </body>
 </html>
