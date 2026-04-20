@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verimlilik Pro - İsim Seçmeli</title>
+    <title>Verimlilik Pro - Tam Analiz</title>
     <style>
         :root { 
             --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
@@ -11,29 +11,33 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
-        .tabs { display: flex; gap: 8px; margin-bottom: 15px; width: 100%; max-width: 1150px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 15px; width: 100%; max-width: 1200px; }
         .tab-btn { flex: 1; padding: 12px; background: #ddd; border: none; cursor: pointer; border-radius: 8px; font-weight: bold; }
         .tab-btn.active { background: var(--primary); color: white; }
 
-        .panel { display: none; width: 100%; max-width: 1150px; }
+        .panel { display: none; width: 100%; max-width: 1200px; }
         .panel.active { display: block; }
 
         .card { background: var(--card-bg); padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
         
+        /* Grid Yapısı */
         .multi-grid { 
             display: grid; 
-            grid-template-columns: 2fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; 
+            grid-template-columns: 1.5fr 0.6fr 0.6fr 0.6fr 0.6fr 0.6fr 0.8fr 1.2fr; 
             gap: 5px; 
             align-items: center; 
             margin-bottom: 5px; 
-            padding: 5px;
+            padding: 8px;
+            background: #fff;
             border-bottom: 1px solid #eee;
         }
-        .multi-header { font-weight: bold; font-size: 11px; color: var(--secondary); text-align: center; background: #ececec; border-radius: 5px; }
+        .multi-header { font-weight: bold; font-size: 10px; color: var(--secondary); text-align: center; background: #ececec; border-radius: 5px; }
         
-        input, select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; box-sizing: border-box; background: #fff; }
+        input, select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; box-sizing: border-box; text-align: center; }
         
-        .res-badge { padding: 8px; border-radius: 5px; text-align: center; font-weight: bold; background: #eee; font-size: 12px; transition: 0.3s; }
+        .res-badge { padding: 8px; border-radius: 5px; text-align: center; font-weight: bold; background: #eee; font-size: 12px; }
+        .detail-text { font-size: 10px; line-height: 1.2; color: #666; }
+        
         .success { background: #27ae60 !important; color: white; }
         .danger { background: #c0392b !important; color: white; }
         
@@ -41,39 +45,42 @@
         button { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
         .btn-main { background: var(--secondary); color: white; flex: 2; }
         .btn-copy { background: #27ae60; color: white; flex: 1; }
-        
+
         label { font-size: 11px; font-weight: bold; color: var(--primary); display: block; margin-top: 8px; text-transform: uppercase; }
+        .summary-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('single')">👤 TEKLİ TAKİP</button>
-        <button class="tab-btn" onclick="switchTab('multi')">👥 EKİP PANELİ</button>
+        <button class="tab-btn" onclick="switchTab('multi')">👥 EKİP PANELİ (12 KİŞİ)</button>
     </div>
 
     <div id="single" class="panel active">
-        <div class="card" style="max-width: 450px; margin: auto;">
-            <label>PERSONEL SEÇİN</label>
-            <select id="sPersonel" class="name-list"></select>
+        <div class="card" style="max-width: 500px; margin: auto;">
+            <label>PERSONEL</label>
+            <select id="sPersonel"></select>
             
-            <label>NORMAL İŞLEM</label>
-            <div style="display: flex; gap: 5px;">
-                <input type="number" id="sAdet" placeholder="Adet">
-                <input type="number" id="sSure" placeholder="Süre">
-            </div>
+            <label>NORMAL İŞLEM (Adet / Süre)</label>
+            <div style="display: flex; gap: 5px;"><input type="number" id="sAdet" placeholder="Adet"><input type="number" id="sSure" placeholder="Süre"></div>
 
-            <label>EK İŞLEM (Katsayı: 0.5)</label>
-            <div style="display: flex; gap: 5px;">
-                <input type="number" id="sEkAdet" placeholder="Adet">
-                <input type="number" id="sEkSure" placeholder="Süre">
-            </div>
+            <label>EK İŞLEM (Adet / Süre)</label>
+            <div style="display: flex; gap: 5px;"><input type="number" id="sEkAdet" placeholder="Adet"><input type="number" id="sEkSure" placeholder="Süre"></div>
 
             <label>TOPLANTI (DK)</label>
-            <input type="number" id="sToplanti" placeholder="Dk">
+            <input type="number" id="sToplanti" placeholder="Toplam Dakika">
 
-            <button class="btn-main" style="width: 100%; margin-top: 15px;" onclick="tekliHesapla()">HESAPLA</button>
-            <div id="singleResult" class="res-badge" style="margin-top: 15px; display: none; font-size: 16px;">%0</div>
+            <button class="btn-main" style="width: 100%; margin-top: 15px;" onclick="tekliHesapla()">ANLIK DURUMU ANALİZ ET</button>
+            
+            <div id="sFullResult" style="display:none; margin-top:15px;">
+                <div id="sBadge" class="res-badge" style="font-size: 20px; padding: 15px; margin-bottom: 10px;">%0</div>
+                <div class="summary-box">
+                    <div class="res-badge success" id="sUretim">0 dk Üretilen</div>
+                    <div class="res-badge" style="background:#e67e22; color:white;" id="sMola">0 dk Mola</div>
+                </div>
+                <div id="sAnaliz" class="card" style="margin-top:10px; font-size:13px; background:#f9f9f9; border-left: 5px solid #333;"></div>
+            </div>
         </div>
     </div>
 
@@ -83,115 +90,124 @@
                 <span>İsim Soyisim</span>
                 <span>N.Adet</span>
                 <span>N.Süre</span>
-                <span>Ek Adet</span>
-                <span>Ek Süre</span>
+                <span>E.Adet</span>
+                <span>E.Süre</span>
                 <span>Top.</span>
                 <span>Verim</span>
+                <span>Analiz Detayı</span>
             </div>
             <div id="multiRows"></div>
             <div class="btn-group">
-                <button class="btn-main" onclick="cokluHesapla()">EKİBİ ANALİZ ET</button>
+                <button class="btn-main" onclick="cokluHesapla()">TÜM EKİBİ ANALİZ ET</button>
                 <button class="btn-copy" onclick="cokluKopyala()">RAPORU KOPYALA</button>
             </div>
         </div>
     </div>
 
 <script>
-    // Görseldeki İsim Listesi
-    const isimler = [
-        "DOGA SUMEYYE SAFAK", "OZLEM BASCAVUSOGULLARI", "FATIH KARADENIZ",
-        "HALIDE PALAVAR", "FATIH BASTUG", "HABIBE KARABIYIK",
-        "GOKSU DANACI", "RUKIYE DEMIRKALE", "YALIN BASBUG",
-        "MUNEVVER YILMAZ", "BERFIN SULTAN DAGLI", "DİĞER"
-    ];
+    const isimler = ["DOGA SUMEYYE SAFAK", "OZLEM BASCAVUSOGULLARI", "FATIH KARADENIZ", "HALIDE PALAVAR", "FATIH BASTUG", "HABIBE KARABIYIK", "GOKSU DANACI", "RUKIYE DEMIRKALE", "YALIN BASBUG", "MUNEVVER YILMAZ", "BERFIN SULTAN DAGLI", "DİĞER"];
 
-    // Select kutularını ve satırları doldur
-    function listeleriDoldur() {
-        const sSelect = document.getElementById('sPersonel');
+    function init() {
+        const sSel = document.getElementById('sPersonel');
         const mRows = document.getElementById('multiRows');
-        
-        // Tekli select
-        isimler.forEach(isim => {
-            sSelect.innerHTML += `<option value="${isim}">${isim}</option>`;
-        });
+        isimler.forEach(n => sSel.innerHTML += `<option value="${n}">${n}</option>`);
 
-        // Çoklu satırlar (12 satır)
         for (let i = 0; i < 12; i++) {
-            let options = isimler.map((isim, idx) => `<option value="${isim}" ${i===idx ? 'selected' : ''}>${isim}</option>`).join('');
-            
+            let opts = isimler.map((n, idx) => `<option value="${n}" ${i===idx ? 'selected' : ''}>${n}</option>`).join('');
             mRows.innerHTML += `
                 <div class="multi-grid">
-                    <select class="m-name">${options}</select>
+                    <select class="m-name">${opts}</select>
                     <input type="number" class="m-adet" placeholder="0">
                     <input type="number" class="m-sure" placeholder="0">
                     <input type="number" class="m-ek-adet" placeholder="0">
                     <input type="number" class="m-ek-sure" placeholder="0">
                     <input type="number" class="m-toplanti" placeholder="0">
                     <div class="res-badge m-res">%0</div>
+                    <div class="detail-text m-detay">-</div>
                 </div>`;
         }
     }
 
-    function switchTab(tabId) {
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
+    function switchTab(t) {
+        document.querySelectorAll('.panel, .tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(t).classList.add('active');
         event.currentTarget.classList.add('active');
     }
 
-    function getGecenMesai() {
+    function hesapDetay(nA, nS, eA, eS, tDk) {
         const simdi = new Date();
         const bas = new Date(); bas.setHours(8, 30, 0);
-        let dk = Math.floor((simdi - bas) / 1000 / 60);
-        return Math.max(1, Math.min(dk, 615));
-    }
+        const bitis = new Date(); bitis.setHours(18, 45, 0);
+        
+        let gecen = Math.floor((simdi - bas) / 60000);
+        gecen = Math.max(1, Math.min(gecen, 615));
+        let kalan = Math.max(0, Math.floor((bitis - simdi) / 60000));
 
-    function hesapla(nA, nS, eA, eS, tDk) {
-        const uretim = (nA * nS) + (nA * 2) + (eA * (eS * 0.5)) + (tDk * 0.70);
-        return ((uretim / getGecenMesai()) * 100).toFixed(1);
+        const uretim = (nA * nS) + (nA * 2) + (eA * (eS * 0.5)) + (tDk * 0.7);
+        const verim = ((uretim / gecen) * 100).toFixed(1);
+        const mola = Math.max(0, gecen - uretim);
+        
+        const hedefUretim = 615 * 0.65;
+        const gerekenEk = Math.max(0, hedefUretim - uretim);
+        const gerekenIslem = Math.ceil(gerekenEk / (nS + 2 || 10));
+
+        return { verim, uretim, mola, kalan, gerekenEk, gerekenIslem };
     }
 
     function tekliHesapla() {
-        const nA = parseFloat(document.getElementById('sAdet').value) || 0;
-        const nS = parseFloat(document.getElementById('sSure').value) || 0;
-        const eA = parseFloat(document.getElementById('sEkAdet').value) || 0;
-        const eS = parseFloat(document.getElementById('sEkSure').value) || 0;
-        const tDk = parseFloat(document.getElementById('sToplanti').value) || 0;
+        const d = hesapDetay(
+            parseFloat(document.getElementById('sAdet').value)||0,
+            parseFloat(document.getElementById('sSure').value)||0,
+            parseFloat(document.getElementById('sEkAdet').value)||0,
+            parseFloat(document.getElementById('sEkSure').value)||0,
+            parseFloat(document.getElementById('sToplanti').value)||0
+        );
+
+        document.getElementById('sFullResult').style.display = 'block';
+        const b = document.getElementById('sBadge');
+        b.innerText = `%${d.verim} VERİMLİLİK`;
+        b.className = d.verim >= 65 ? 'res-badge success' : 'res-badge danger';
         
-        const verim = hesapla(nA, nS, eA, eS, tDk);
-        const res = document.getElementById('singleResult');
-        res.style.display = 'block';
-        res.innerText = `%${verim}`;
-        res.className = verim >= 65 ? 'res-badge success' : 'res-badge danger';
+        document.getElementById('sUretim').innerText = d.uretim.toFixed(0) + " dk Üretilen";
+        document.getElementById('sMola').innerText = d.mola.toFixed(0) + " dk Mola";
+        
+        document.getElementById('sAnaliz').innerHTML = `
+            <b>🏁 Kalan Zaman Analizi:</b><br>
+            • Mesai Bitimine: ${d.kalan} dk var.<br>
+            • Hedef için gereken ek iş: ${d.gerekenEk.toFixed(0)} dk.<br>
+            • Kalan sürede yaklaşık <b>${d.gerekenIslem}</b> normal işlem daha yapmalısın.
+        `;
     }
 
     function cokluHesapla() {
         document.querySelectorAll('#multiRows .multi-grid').forEach(row => {
-            const v = hesapla(
-                parseFloat(row.querySelector('.m-adet').value) || 0,
-                parseFloat(row.querySelector('.m-sure').value) || 0,
-                parseFloat(row.querySelector('.m-ek-adet').value) || 0,
-                parseFloat(row.querySelector('.m-ek-sure').value) || 0,
-                parseFloat(row.querySelector('.m-toplanti').value) || 0
+            const d = hesapDetay(
+                parseFloat(row.querySelector('.m-adet').value)||0,
+                parseFloat(row.querySelector('.m-sure').value)||0,
+                parseFloat(row.querySelector('.m-ek-adet').value)||0,
+                parseFloat(row.querySelector('.m-ek-sure').value)||0,
+                parseFloat(row.querySelector('.m-toplanti').value)||0
             );
             const badge = row.querySelector('.m-res');
-            badge.innerText = `%${v}`;
-            badge.className = v >= 65 ? 'res-badge m-res success' : (v > 0 ? 'res-badge m-res danger' : 'res-badge m-res');
+            badge.innerText = `%${d.verim}`;
+            badge.className = d.verim >= 65 ? 'res-badge success' : (d.verim > 0 ? 'res-badge danger' : 'res-badge');
+            
+            row.querySelector('.m-detay').innerHTML = `Üret: ${d.uretim.toFixed(0)} | Mola: ${d.mola.toFixed(0)}<br>Hedef için: +${d.gerekenIslem} iş`;
         });
     }
 
     function cokluKopyala() {
-        let r = "📊 EKİP VERİMLİLİK RAPORU\n------------------------\n";
+        let r = "📊 EKİP RAPORU\n----------------\n";
         document.querySelectorAll('#multiRows .multi-grid').forEach(row => {
             const n = row.querySelector('.m-name').value;
             const v = row.querySelector('.m-res').innerText;
-            if(v !== "%0") r += `• ${n}: ${v}\n`;
+            if(v !== "%0") r += `${n}: ${v}\n`;
         });
         navigator.clipboard.writeText(r);
         alert("Rapor kopyalandı!");
     }
 
-    listeleriDoldur();
+    init();
 </script>
 </body>
 </html>
