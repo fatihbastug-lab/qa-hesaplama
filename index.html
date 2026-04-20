@@ -3,56 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verimlilik Takibi Pro</title>
+    <title>Verimlilik Takibi Pro - Final</title>
     <style>
-        :root { 
-            --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
-            --card-bg: #ffffff; --text: #333333; --border: #eeeeee;
-        }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        
-        .info-bar { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
-            background: #fff; padding: 15px; border-radius: 15px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); width: 100%; max-width: 1200px; 
-            margin-bottom: 15px; font-size: 13px; border: 1px solid var(--border);
-        }
-        .info-item { display: flex; align-items: center; gap: 5px; color: #555; }
+        :root { --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; --card-bg: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .info-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #fff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); width: 100%; max-width: 1200px; margin-bottom: 15px; font-size: 13px; }
         .tabs { display: flex; gap: 8px; margin-bottom: 15px; width: 100%; max-width: 1200px; }
         .tab-btn { flex: 1; padding: 12px; background: #ddd; border: none; cursor: pointer; border-radius: 8px; font-weight: bold; }
         .tab-btn.active { background: var(--primary); color: white; }
         .panel { display: none; width: 100%; max-width: 1200px; }
         .panel.active { display: block; }
-        .card { background: var(--card-bg); padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
-        
-        .multi-grid { 
-            display: grid; grid-template-columns: 1.5fr 0.6fr 0.6fr 0.6fr 0.6fr 0.6fr 0.8fr 1.2fr; 
-            gap: 5px; align-items: center; margin-bottom: 5px; padding: 8px; background: #fff; border-bottom: 1px solid #eee;
-        }
-        .multi-header { font-weight: bold; font-size: 10px; color: var(--secondary); text-align: center; background: #ececec; border-radius: 5px; }
-        input, select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; box-sizing: border-box; text-align: center; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .multi-grid { display: grid; grid-template-columns: 1.5fr 0.6fr 0.6fr 0.6fr 0.6fr 0.6fr 0.8fr 1.2fr; gap: 5px; align-items: center; padding: 8px; border-bottom: 1px solid #eee; }
+        .multi-header { font-weight: bold; font-size: 10px; text-align: center; background: #ececec; border-radius: 5px; padding: 10px; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 12px; text-align: center; }
         .res-badge { padding: 8px; border-radius: 5px; text-align: center; font-weight: bold; background: #eee; font-size: 12px; }
         .success { background: #27ae60 !important; color: white; }
         .danger { background: #c0392b !important; color: white; }
-        
         .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        button { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 13px; }
-        .btn-main { background: var(--secondary); color: white; flex: 2; min-width: 200px; }
+        button { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-main { background: var(--secondary); color: white; flex: 2; }
         .btn-excel { background: #1f7244; color: white; flex: 1; }
         .btn-share { background: #3498db; color: white; flex: 1; }
-        
-        label { font-size: 11px; font-weight: bold; color: var(--primary); display: block; margin-top: 8px; text-transform: uppercase; }
-        .summary-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        #sAnaliz { margin-top: 10px; font-size: 13px; padding: 10px; border-radius: 8px; background: #f9f9f9; border-left: 5px solid var(--secondary); }
+        .m-detay { font-size: 10px; color: #666; text-align: center; }
     </style>
 </head>
 <body>
 
     <div class="info-bar">
-        <div class="info-item">🕒 Mesai: <b>08:30 - 18:45</b></div>
-        <div class="info-item">☕ Toplam: <b>615 dk</b></div>
-        <div class="info-item">🤝 Toplantı Verimi: <b>%70</b></div>
-        <div class="info-item">🎯 Hedef Verim: <b>%65</b></div>
+        <div>🕒 Mesai: <b>08:30 - 18:45</b></div>
+        <div>☕ Toplam: <b>615 dk</b></div>
+        <div>🤝 Topl. Verimi: <b>%70</b></div>
+        <div>🎯 Hedef Verim: <b>%65</b></div>
     </div>
 
     <div class="tabs">
@@ -62,24 +44,15 @@
 
     <div id="single" class="panel active">
         <div class="card" style="max-width: 500px; margin: auto;">
-            <label>PERSONEL</label>
-            <select id="sPersonel"></select>
-            <label>NORMAL İŞLEM (Adet / Süre)</label>
-            <div style="display: flex; gap: 5px;"><input type="number" id="sAdet" placeholder="Adet"><input type="number" id="sSure" placeholder="Süre"></div>
-            <label>EK İŞLEM (Adet / Süre)</label>
-            <div style="display: flex; gap: 5px;"><input type="number" id="sEkAdet" placeholder="Adet"><input type="number" id="sEkSure" placeholder="Süre"></div>
-            <label>TOPLANTI (DK)</label>
-            <input type="number" id="sToplanti" placeholder="Dk">
-            
-            <button class="btn-main" style="width: 100%; margin-top: 15px;" onclick="tekliHesapla()">ANLIK DURUMU ANALİZ ET</button>
-            
-            <div id="sFullResult" style="display:none; margin-top:15px;">
-                <div id="sBadge" class="res-badge" style="font-size: 20px; padding: 15px; margin-bottom: 10px;">%0</div>
-                <div class="summary-box">
-                    <div class="res-badge success" id="sUretim">0 dk Üretilen</div>
-                    <div class="res-badge" style="background:#e67e22; color:white;" id="sMola">0 dk Mola</div>
-                </div>
-                <div id="sAnaliz"></div>
+            <select id="sPersonel" style="margin-bottom:10px;"></select>
+            <input type="number" id="sAdet" placeholder="Normal Adet" style="margin-bottom:5px;">
+            <input type="number" id="sSure" placeholder="Normal Süre" style="margin-bottom:5px;">
+            <input type="number" id="sEkAdet" placeholder="Ek İşlem Adet" style="margin-bottom:5px;">
+            <input type="number" id="sEkSure" placeholder="Ek İşlem Süre" style="margin-bottom:5px;">
+            <input type="number" id="sToplanti" placeholder="Toplantı (dk)">
+            <button class="btn-main" style="width:100%; margin-top:15px;" onclick="tekliHesapla()">HESAPLA</button>
+            <div id="sFullResult" style="display:none; margin-top:15px; text-align: center;">
+                <div id="sBadge" class="res-badge" style="font-size: 18px; padding: 15px;">%0</div>
                 <div class="btn-group">
                     <button class="btn-excel" onclick="tekliExcelIndir()">📊 EXCEL</button>
                     <button class="btn-share" onclick="tekliPaylas()">📤 PAYLAŞ</button>
@@ -91,13 +64,13 @@
     <div id="multi" class="panel">
         <div class="card">
             <div class="multi-grid multi-header">
-                <span>İsim Soyisim</span><span>N.Adet</span><span>N.Süre</span><span>E.Adet</span><span>E.Süre</span><span>Top.</span><span>Verim</span><span>Analiz Detayı</span>
+                <span>Personel</span><span>N.A</span><span>N.S</span><span>E.A</span><span>E.S</span><span>Top.</span><span>Verim</span><span>Analiz</span>
             </div>
             <div id="multiRows"></div>
             <div class="btn-group">
-                <button class="btn-main" onclick="cokluHesapla()">TÜM EKİBİ ANALİZ ET</button>
-                <button class="btn-excel" onclick="cokluExcelIndir()">📑 EKİP EXCEL İNDİR</button>
-                <button class="btn-share" onclick="cokluPaylas()">📤 TÜMÜNÜ PAYLAŞ</button>
+                <button class="btn-main" onclick="cokluHesapla()">EKİBİ ANALİZ ET</button>
+                <button class="btn-excel" onclick="cokluExcelIndir()">📊 EXCEL İNDİR</button>
+                <button class="btn-share" onclick="cokluPaylas()">📤 PAYLAŞ</button>
             </div>
         </div>
     </div>
@@ -114,13 +87,13 @@
             mRows.innerHTML += `
                 <div class="multi-grid">
                     <select class="m-name">${opts}</select>
-                    <input type="number" class="m-adet" placeholder="0">
-                    <input type="number" class="m-sure" placeholder="0">
-                    <input type="number" class="m-ek-adet" placeholder="0">
-                    <input type="number" class="m-ek-sure" placeholder="0">
-                    <input type="number" class="m-toplanti" placeholder="0">
+                    <input type="number" class="m-adet" value="0">
+                    <input type="number" class="m-sure" value="0">
+                    <input type="number" class="m-ek-adet" value="0">
+                    <input type="number" class="m-ek-sure" value="0">
+                    <input type="number" class="m-toplanti" value="0">
                     <div class="res-badge m-res">%0</div>
-                    <div style="font-size:10px; color:#666;" class="m-detay">-</div>
+                    <div class="m-detay">-</div>
                 </div>`;
         }
     }
@@ -134,16 +107,11 @@
     function hesapDetay(nA, nS, eA, eS, tDk) {
         const simdi = new Date();
         const bas = new Date(); bas.setHours(8, 30, 0);
-        const bitis = new Date(); bitis.setHours(18, 45, 0);
         let gecen = Math.floor((simdi - bas) / 60000);
         gecen = Math.max(1, Math.min(gecen, 615));
-        let kalan = Math.max(0, Math.floor((bitis - simdi) / 60000));
         const uretim = (nA * nS) + (nA * 2) + (eA * (eS * 0.5)) + (tDk * 0.7);
         const verim = ((uretim / gecen) * 100).toFixed(1);
-        const mola = Math.max(0, gecen - uretim);
-        const gerekenEk = Math.max(0, (615 * 0.65) - uretim);
-        const gerekenIslem = Math.ceil(gerekenEk / (nS + 2 || 10));
-        return { verim, uretim, mola, kalan, gerekenEk, gerekenIslem };
+        return { verim, uretim: uretim.toFixed(0) };
     }
 
     function tekliHesapla() {
@@ -156,9 +124,6 @@
         const b = document.getElementById('sBadge');
         b.innerText = `%${d.verim} VERİMLİLİK`;
         b.className = d.verim >= 65 ? 'res-badge success' : 'res-badge danger';
-        document.getElementById('sUretim').innerText = d.uretim.toFixed(0) + " dk Üretilen";
-        document.getElementById('sMola').innerText = d.mola.toFixed(0) + " dk Mola";
-        document.getElementById('sAnaliz').innerHTML = `<b>🏁 Analiz:</b> Mesaiye ${d.kalan} dk kaldı. Hedef için <b>${d.gerekenIslem}</b> iş gerekli.`;
     }
 
     function cokluHesapla() {
@@ -171,74 +136,63 @@
             const badge = row.querySelector('.m-res');
             badge.innerText = `%${d.verim}`;
             badge.className = d.verim >= 65 ? 'res-badge success' : (d.verim > 0 ? 'res-badge danger' : 'res-badge');
-            row.querySelector('.m-detay').innerHTML = `Ü: ${d.uretim.toFixed(0)} | M: ${d.mola.toFixed(0)} | +${d.gerekenIslem} iş`;
+            row.querySelector('.m-detay').innerText = `Üretilen: ${d.uretim} dk`;
         });
     }
 
-    // --- PAYLAŞMA FONKSİYONU ---
-    async function paylas(baslik, metin) {
-        if (navigator.share) {
-            try {
-                await navigator.share({ title: baslik, text: metin });
-            } catch (err) {
-                console.log("Paylaşım iptal edildi");
-            }
-        } else {
-            // Navigator share yoksa (bazı masaüstü tarayıcılar) panoya kopyala
-            navigator.clipboard.writeText(metin);
-            alert("Sistem paylaşımı desteklemiyor, rapor kopyalandı!");
-        }
+    // GÜÇLÜ EXCEL İNDİRME (Unicode/UTF-8)
+    function excelIndir(filename, tableHtml) {
+        const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='UTF-8'></head><body>";
+        const footer = "</body></html>";
+        const blob = new Blob([header + tableHtml + footer], { type: 'application/vnd.ms-excel' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
     }
 
-    function tekliPaylas() {
-        const isim = document.getElementById('sPersonel').value;
-        const verim = document.getElementById('sBadge').innerText;
-        const uretim = document.getElementById('sUretim').innerText;
-        const analiz = document.getElementById('sAnaliz').innerText;
-        const metin = `📊 VERİMLİLİK RAPORU (${isim})\n\nVerim: ${verim}\n${uretim}\n${analiz}`;
-        paylas("Bireysel Rapor", metin);
-    }
-
-    function cokluPaylas() {
-        let metin = "🚀 EKİP VERİMLİLİK PANELİ\n----------------------\n";
+    function cokluExcelIndir() {
+        let table = "<table border='1'><tr><th>Personel</th><th>Verimlilik</th><th>Detay</th></tr>";
         document.querySelectorAll('#multiRows .multi-grid').forEach(row => {
-            const n = row.querySelector('.m-name').value;
             const v = row.querySelector('.m-res').innerText;
-            if(v !== "%0") metin += `• ${n}: ${v}\n`;
+            if(v !== "%0") {
+                table += `<tr><td>${row.querySelector('.m-name').value}</td><td>${v}</td><td>${row.querySelector('.m-detay').innerText}</td></tr>`;
+            }
         });
-        paylas("Ekip Raporu", metin);
-    }
-
-    // --- EXCEL FONKSİYONU ---
-    function exportToExcel(filename, headers, rows) {
-        let table = `<table border="1"><thead><tr>`;
-        headers.forEach(h => table += `<th style="background-color: #cc0000; color: #ffffff;">${h}</th>`);
-        table += `</tr></thead><tbody>`;
-        rows.forEach(row => {
-            table += `<tr>`;
-            row.forEach(cell => table += `<td>${cell}</td>`);
-            table += `</tr>`;
-        });
-        table += `</tbody></table>`;
-        const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>${table}</body></html>`;
-        const link = document.createElement("a");
-        link.href = 'data:application/vnd.ms-excel;base64,' + btoa(unescape(encodeURIComponent(template)));
-        link.download = filename;
-        link.click();
+        table += "</table>";
+        excelIndir("Ekip_Raporu.xls", table);
     }
 
     function tekliExcelIndir() {
         const isim = document.getElementById('sPersonel').value;
-        exportToExcel("Tekli_Rapor.xls", ["Personel", "Verimlilik", "Üretilen", "Mola"], [[isim, document.getElementById('sBadge').innerText, document.getElementById('sUretim').innerText, document.getElementById('sMola').innerText]]);
+        const verim = document.getElementById('sBadge').innerText;
+        let table = `<table border='1'><tr><th>Personel</th><th>Verim</th></tr><tr><td>${isim}</td><td>${verim}</td></tr></table>`;
+        excelIndir("Tekli_Rapor.xls", table);
     }
 
-    function cokluExcelIndir() {
-        const data = [];
+    // PAYLAŞMA FONKSİYONU
+    async function paylasimYap(metin) {
+        if (navigator.share) {
+            try { await navigator.share({ title: 'Rapor', text: metin }); } catch {}
+        } else {
+            navigator.clipboard.writeText(metin);
+            alert("Rapor kopyalandı!");
+        }
+    }
+
+    function cokluPaylas() {
+        let t = "📊 EKİP RAPORU\n";
         document.querySelectorAll('#multiRows .multi-grid').forEach(row => {
             const v = row.querySelector('.m-res').innerText;
-            if(v !== "%0") data.push([row.querySelector('.m-name').value, v, row.querySelector('.m-detay').innerText]);
+            if(v !== "%0") t += `• ${row.querySelector('.m-name').value}: ${v}\n`;
         });
-        exportToExcel("Ekip_Raporu.xls", ["Personel", "Verimlilik", "Detaylar"], data);
+        paylasimYap(t);
+    }
+
+    function tekliPaylas() {
+        const t = `📊 RAPOR\nPersonel: ${document.getElementById('sPersonel').value}\nVerim: ${document.getElementById('sBadge').innerText}`;
+        paylasimYap(t);
     }
 
     init();
