@@ -3,58 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verimlilik Takibi - İlk Haline Dönüş</title>
+    <title>Anlık Verimlilik Analizi</title>
     <style>
         :root { 
             --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
             --card-bg: #ffffff; --text: #333333; --border: #eeeeee;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 15px; display: flex; flex-direction: column; align-items: center; }
         
-        .card { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
         
-        .info-header { text-align: center; margin-bottom: 20px; font-size: 14px; background: #eef2f3; padding: 10px; border-radius: 10px; border: 1px solid #ddd; }
+        .info-header { text-align: center; margin-bottom: 15px; font-size: 13px; background: #eef2f3; padding: 10px; border-radius: 10px; border: 1px solid #ddd; line-height: 1.4; }
         
-        label { font-size: 12px; font-weight: bold; color: var(--primary); display: block; margin-top: 15px; margin-bottom: 5px; text-transform: uppercase; }
+        label { font-size: 11px; font-weight: bold; color: var(--primary); display: block; margin-top: 12px; margin-bottom: 4px; text-transform: uppercase; }
         
-        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; font-size: 14px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; font-size: 14px; box-sizing: border-box; }
         
-        .btn-main { width: 100%; padding: 15px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-        .btn-main:hover { background: #1a252f; }
-
-        .res-badge { margin-top: 20px; padding: 20px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 22px; display: none; }
+        .btn-main { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        
+        .res-badge { margin-top: 15px; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 20px; display: none; }
         .success { background: #27ae60; color: white; }
         .danger { background: #c0392b; color: white; }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; display: none; }
-        .stat-item { padding: 15px; border-radius: 10px; text-align: center; font-size: 13px; font-weight: bold; color: white; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; display: none; }
+        .stat-item { padding: 12px; border-radius: 8px; text-align: center; font-size: 12px; font-weight: bold; color: white; }
         
-        .analysis-box { margin-top: 15px; padding: 15px; border-radius: 10px; background: #f9f9f9; border-left: 5px solid var(--secondary); font-size: 14px; line-height: 1.5; display: none; }
+        .analysis-box { margin-top: 12px; padding: 12px; border-radius: 8px; background: #fffde7; border-left: 5px solid #fbc02d; font-size: 13px; line-height: 1.5; display: none; color: #444; }
+        b { color: #000; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2 style="text-align: center; margin-top: 0; color: var(--secondary);">Verimlilik Takibi</h2>
-        <div class="info-header">🕒 08:30 - 18:45 | Hedef: %65</div>
+        <div class="info-header">
+            🕒 Mesai Başlangıcı: <b>08:30</b> | Bitiş: <b>18:45</b><br>
+            🎯 Hedef Verimlilik: <b>%65</b>
+        </div>
 
         <label>PERSONEL</label>
         <select id="personelSelect"></select>
 
-        <label>NORMAL İŞLEM</label>
-        <div style="display: flex; gap: 10px;">
+        <label>NORMAL DİNLEME (İŞLEM)</label>
+        <div style="display: flex; gap: 8px;">
             <input type="number" id="adet" placeholder="Adet">
-            <input type="number" id="sure" placeholder="Süre (dk)">
+            <input type="number" id="sure" placeholder="Ort. Süre">
         </div>
 
-        <label>EK İŞLEM (Katsayı: 0.5)</label>
-        <div style="display: flex; gap: 10px;">
+        <label>EK İŞLEM (MMA VB. - 0.5 Katsayı)</label>
+        <div style="display: flex; gap: 8px;">
             <input type="number" id="ekAdet" placeholder="Adet">
-            <input type="number" id="ekSure" placeholder="Süre (dk)">
+            <input type="number" id="ekSure" placeholder="Ort. Süre">
         </div>
 
-        <label>TOPLANTI / EĞİTİM (DK)</label>
-        <input type="number" id="toplanti" placeholder="Toplam Dakika">
+        <label>TOPLANTI / EĞİTİM (DAKİKA)</label>
+        <input type="number" id="toplanti" placeholder="Toplam dk">
 
         <button class="btn-main" onclick="hesapla()">ANLIK DURUMU ANALİZ ET</button>
 
@@ -62,7 +64,7 @@
 
         <div id="istatistikler" class="stats-grid">
             <div class="stat-item" style="background: #2980b9;" id="uretimDk">0 dk Üretilen</div>
-            <div class="stat-item" style="background: #e67e22;" id="molaDk">0 dk Mola</div>
+            <div class="stat-item" style="background: #e67e22;" id="molaDk">0 dk Kayıp</div>
         </div>
 
         <div id="analizDetay" class="analysis-box"></div>
@@ -74,59 +76,66 @@
     const sel = document.getElementById('personelSelect');
     isimler.forEach(isim => {
         let opt = document.createElement('option');
-        opt.value = isim;
-        opt.innerHTML = isim;
-        sel.appendChild(opt);
+        opt.value = isim; opt.innerHTML = isim; sel.appendChild(opt);
     });
 
-    function getGecenMesai() {
+    function hesapla() {
+        // Zaman Hesaplama (Anlık)
         const simdi = new Date();
         const baslangic = new Date();
         baslangic.setHours(8, 30, 0);
-        let gecenDk = Math.floor((simdi - baslangic) / 1000 / 60);
-        return Math.max(1, Math.min(gecenDk, 615));
-    }
+        
+        const bitis = new Date();
+        bitis.setHours(18, 45, 0);
 
-    function hesapla() {
+        let gecenDk = Math.floor((simdi - baslangic) / 60000);
+        gecenDk = Math.max(1, Math.min(gecenDk, 615)); // Maksimum mesai süresi 615dk
+        
+        let kalanDk = Math.max(0, Math.floor((bitis - simdi) / 60000));
+
+        // Girişleri Al
         const nA = parseFloat(document.getElementById('adet').value) || 0;
         const nS = parseFloat(document.getElementById('sure').value) || 0;
         const eA = parseFloat(document.getElementById('ekAdet').value) || 0;
         const eS = parseFloat(document.getElementById('ekSure').value) || 0;
         const tDk = parseFloat(document.getElementById('toplanti').value) || 0;
 
-        const gecenMesai = getGecenMesai();
-        const kalanMesai = 615 - gecenMesai;
-
-        // Hesaplama Mantığı
+        // Üretim Hesaplama (İşlem başı +2dk hazırlık dahil)
         const uretim = (nA * nS) + (nA * 2) + (eA * (eS * 0.5)) + (tDk * 0.70);
-        const verim = ((uretim / gecenMesai) * 100).toFixed(1);
-        const mola = Math.max(0, gecenMesai - uretim);
+        
+        // Verimlilik (O ana kadar geçen süreye göre!)
+        const verim = ((uretim / gecenDk) * 100).toFixed(1);
+        const molaKayiP = Math.max(0, gecenDk - uretim);
 
-        // Hedef Analizi
-        const hedefUretim = 615 * 0.65;
-        const gerekenEkUretim = Math.max(0, hedefUretim - uretim);
-        const gerekenIslem = Math.ceil(gerekenEkUretim / (nS + 2 || 10));
+        // Gün Sonu %65 Hedef Analizi
+        const gunSonuHedefDk = 615 * 0.65; // 399.7 dk
+        const gerekenEkUretim = Math.max(0, gunSonuHedefDk - uretim);
+        
+        // Kalan sürede yapılması gereken adet (Varsayılan süreye göre)
+        const ortSure = nS > 0 ? nS : 10; 
+        const gerekenAdet = Math.ceil(gerekenEkUretim / (ortSure + 2));
 
-        // Görünür yap
+        // UI Güncelleme
+        document.getElementById('verimSonuc').style.display = 'block';
+        document.getElementById('istatistikler').style.display = 'grid';
+        document.getElementById('analizDetay').style.display = 'block';
+
         const vBadge = document.getElementById('verimSonuc');
-        const iGrid = document.getElementById('istatistikler');
-        const aBox = document.getElementById('analizDetay');
-
-        vBadge.style.display = 'block';
-        iGrid.style.display = 'grid';
-        aBox.style.display = 'block';
-
-        vBadge.innerText = `%${verim} VERİMLİLİK`;
+        vBadge.innerText = `%${verim} ANLIK VERİM`;
         vBadge.className = verim >= 65 ? 'res-badge success' : 'res-badge danger';
 
-        document.getElementById('uretimDk').innerText = `${uretim.toFixed(0)} dk Üretilen`;
-        document.getElementById('molaDk').innerText = `${mola.toFixed(0)} dk Mola`;
+        document.getElementById('uretimDk').innerText = `${uretim.toFixed(0)} dk Çalışma`;
+        document.getElementById('molaDk').innerText = `${molaKayiP.toFixed(0)} dk Mola/Kayıp`;
 
         document.getElementById('analizDetay').innerHTML = `
-            <b>🏁 Kalan Zaman Analizi:</b><br>
-            • Mesai bitimine <b>${kalanMesai} dakika</b> var.<br>
-            • Hedef olan %65'e ulaşmak için <b>${gerekenEkUretim.toFixed(0)} dk</b> daha üretim yapmalısın.<br>
-            • Kalan sürede yaklaşık <b>${gerekenIslem} adet</b> normal işlem daha tamamlaman gerekiyor.
+            <b>🕒 Zaman Analizi:</b><br>
+            • Mesai başlayalı <b>${gecenDk} dk</b> oldu.<br>
+            • Mola ve kayıp zamanın: <b>${molaKayiP.toFixed(0)} dk</b>.<br>
+            • Mesai bitimine <b>${kalanDk} dk</b> kaldı.<br><br>
+            <b>🎯 Hedef (%65) Analizi:</b><br>
+            • Gün sonu hedefine ulaşmak için toplamda <b>${gunSonuHedefDk.toFixed(0)} dk</b> üretim yapmalısın.<br>
+            • Şu anki açığın: <b>${gerekenEkUretim.toFixed(0)} dk</b>.<br>
+            • Kalan sürede en az <b>${gerekenAdet} adet</b> daha dinleme yapman gerekiyor.
         `;
     }
 </script>
