@@ -3,41 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anlık Verimlilik Analizi</title>
+    <title>Gerçekçi Verimlilik Analizi</title>
     <style>
-        :root { 
-            --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; 
-            --card-bg: #ffffff; --text: #333333; --border: #eeeeee;
-        }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        
+        :root { --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; --card-bg: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 15px; display: flex; flex-direction: column; align-items: center; }
         .card { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
-        
-        .info-header { text-align: center; margin-bottom: 15px; font-size: 13px; background: #eef2f3; padding: 10px; border-radius: 10px; border: 1px solid #ddd; line-height: 1.4; }
-        
+        .info-header { text-align: center; margin-bottom: 15px; font-size: 13px; background: #eef2f3; padding: 10px; border-radius: 10px; border: 1px solid #ddd; }
         label { font-size: 11px; font-weight: bold; color: var(--primary); display: block; margin-top: 12px; margin-bottom: 4px; text-transform: uppercase; }
-        
-        input, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; font-size: 14px; box-sizing: border-box; }
-        
-        .btn-main { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
-        
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: #fafafa; font-size: 14px; box-sizing: border-box; }
+        .btn-main { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .res-badge { margin-top: 15px; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 20px; display: none; }
         .success { background: #27ae60; color: white; }
+        .warning { background: #f39c12; color: white; }
         .danger { background: #c0392b; color: white; }
-
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; display: none; }
         .stat-item { padding: 12px; border-radius: 8px; text-align: center; font-size: 12px; font-weight: bold; color: white; }
-        
-        .analysis-box { margin-top: 12px; padding: 12px; border-radius: 8px; background: #fffde7; border-left: 5px solid #fbc02d; font-size: 13px; line-height: 1.5; display: none; color: #444; }
-        b { color: #000; }
+        .analysis-box { margin-top: 12px; padding: 12px; border-radius: 8px; background: #fffde7; border-left: 5px solid #fbc02d; font-size: 13px; line-height: 1.5; display: none; }
     </style>
 </head>
 <body>
 
     <div class="card">
         <div class="info-header">
-            🕒 Mesai Başlangıcı: <b>08:30</b> | Bitiş: <b>18:45</b><br>
-            🎯 Hedef Verimlilik: <b>%65</b>
+            🕒 Mesai: <b>08:30 - 18:45</b> (615 dk)<br>
+            🎯 Günlük Hedef: <b>%65</b>
         </div>
 
         <label>PERSONEL</label>
@@ -49,7 +38,7 @@
             <input type="number" id="sure" placeholder="Ort. Süre">
         </div>
 
-        <label>EK İŞLEM (MMA VB. - 0.5 Katsayı)</label>
+        <label>EK İŞLEM (0.5 Katsayı)</label>
         <div style="display: flex; gap: 8px;">
             <input type="number" id="ekAdet" placeholder="Adet">
             <input type="number" id="ekSure" placeholder="Ort. Süre">
@@ -64,7 +53,7 @@
 
         <div id="istatistikler" class="stats-grid">
             <div class="stat-item" style="background: #2980b9;" id="uretimDk">0 dk Üretilen</div>
-            <div class="stat-item" style="background: #e67e22;" id="molaDk">0 dk Kayıp</div>
+            <div class="stat-item" style="background: #e67e22;" id="molaDk">0 dk Mola</div>
         </div>
 
         <div id="analizDetay" class="analysis-box"></div>
@@ -72,73 +61,62 @@
 
 <script>
     const isimler = ["DOGA SUMEYYE SAFAK", "OZLEM BASCAVUSOGULLARI", "FATIH KARADENIZ", "HALIDE PALAVAR", "FATIH BASTUG", "HABIBE KARABIYIK", "GOKSU DANACI", "RUKIYE DEMIRKALE", "YALIN BASBUG", "MUNEVVER YILMAZ", "BERFIN SULTAN DAGLI"];
-    
     const sel = document.getElementById('personelSelect');
-    isimler.forEach(isim => {
-        let opt = document.createElement('option');
-        opt.value = isim; opt.innerHTML = isim; sel.appendChild(opt);
-    });
+    isimler.forEach(isim => { let opt = document.createElement('option'); opt.value = isim; opt.innerHTML = isim; sel.appendChild(opt); });
 
     function hesapla() {
-        // Zaman Hesaplama (Anlık)
         const simdi = new Date();
-        const baslangic = new Date();
-        baslangic.setHours(8, 30, 0);
-        
-        const bitis = new Date();
-        bitis.setHours(18, 45, 0);
+        const baslangic = new Date(); baslangic.setHours(8, 30, 0);
+        const bitis = new Date(); bitis.setHours(18, 45, 0);
+        const toplamMesai = 615;
 
         let gecenDk = Math.floor((simdi - baslangic) / 60000);
-        gecenDk = Math.max(1, Math.min(gecenDk, 615)); // Maksimum mesai süresi 615dk
-        
+        gecenDk = Math.max(1, Math.min(gecenDk, toplamMesai));
         let kalanDk = Math.max(0, Math.floor((bitis - simdi) / 60000));
 
-        // Girişleri Al
         const nA = parseFloat(document.getElementById('adet').value) || 0;
         const nS = parseFloat(document.getElementById('sure').value) || 0;
         const eA = parseFloat(document.getElementById('ekAdet').value) || 0;
         const eS = parseFloat(document.getElementById('ekSure').value) || 0;
         const tDk = parseFloat(document.getElementById('toplanti').value) || 0;
 
-        // Üretim Hesaplama (İşlem başı +2dk hazırlık dahil)
+        // Üretim Hesaplama
         const uretim = (nA * nS) + (nA * 2) + (eA * (eS * 0.5)) + (tDk * 0.70);
         
-        // Verimlilik (O ana kadar geçen süreye göre!)
-        const verim = ((uretim / gecenDk) * 100).toFixed(1);
-        const molaKayiP = Math.max(0, gecenDk - uretim);
+        // --- KRİTİK DÜZELTME: Toplam Mesaiye Oranla ---
+        const toplamVerim = ((uretim / toplamMesai) * 100).toFixed(1);
+        const anlikMola = Math.max(0, gecenDk - uretim);
 
-        // Gün Sonu %65 Hedef Analizi
-        const gunSonuHedefDk = 615 * 0.65; // 399.7 dk
-        const gerekenEkUretim = Math.max(0, gunSonuHedefDk - uretim);
-        
-        // Kalan sürede yapılması gereken adet (Varsayılan süreye göre)
-        const ortSure = nS > 0 ? nS : 10; 
-        const gerekenAdet = Math.ceil(gerekenEkUretim / (ortSure + 2));
+        // Hedef Analizi
+        const hedefDk = toplamMesai * 0.65; // 400 dk
+        const kalanHedefDk = Math.max(0, hedefDk - uretim);
+        const gerekenAdet = Math.ceil(kalanHedefDk / (nS + 2 || 10));
 
         // UI Güncelleme
-        document.getElementById('verimSonuc').style.display = 'block';
-        document.getElementById('istatistikler').style.display = 'grid';
-        document.getElementById('analizDetay').style.display = 'block';
-
         const vBadge = document.getElementById('verimSonuc');
-        vBadge.innerText = `%${verim} ANLIK VERİM`;
-        vBadge.className = verim >= 65 ? 'res-badge success' : 'res-badge danger';
+        vBadge.style.display = 'block';
+        vBadge.innerText = `%${toplamVerim} TOPLAM VERİMLİLİK`;
+        
+        if(toplamVerim >= 65) vBadge.className = 'res-badge success';
+        else if(toplamVerim >= 40) vBadge.className = 'res-badge warning';
+        else vBadge.className = 'res-badge danger';
 
+        document.getElementById('istatistikler').style.display = 'grid';
         document.getElementById('uretimDk').innerText = `${uretim.toFixed(0)} dk Çalışma`;
-        document.getElementById('molaDk').innerText = `${molaKayiP.toFixed(0)} dk Mola/Kayıp`;
+        document.getElementById('molaDk').innerText = `${anlikMola.toFixed(0)} dk Mola`;
 
+        document.getElementById('analizDetay').style.display = 'block';
         document.getElementById('analizDetay').innerHTML = `
             <b>🕒 Zaman Analizi:</b><br>
             • Mesai başlayalı <b>${gecenDk} dk</b> oldu.<br>
-            • Mola ve kayıp zamanın: <b>${molaKayiP.toFixed(0)} dk</b>.<br>
+            • Şu ana kadarki mola/kayıp: <b>${anlikMola.toFixed(0)} dk</b>.<br>
             • Mesai bitimine <b>${kalanDk} dk</b> kaldı.<br><br>
-            <b>🎯 Hedef (%65) Analizi:</b><br>
-            • Gün sonu hedefine ulaşmak için toplamda <b>${gunSonuHedefDk.toFixed(0)} dk</b> üretim yapmalısın.<br>
-            • Şu anki açığın: <b>${gerekenEkUretim.toFixed(0)} dk</b>.<br>
-            • Kalan sürede en az <b>${gerekenAdet} adet</b> daha dinleme yapman gerekiyor.
+            <b>🎯 Gün Sonu (%65) Hedefi:</b><br>
+            • Hedef için gereken toplam üretim: <b>${hedefDk.toFixed(0)} dk</b>.<br>
+            • Kalan hedef açığın: <b>${kalanHedefDk.toFixed(0)} dk</b>.<br>
+            • Hedefi yakalamak için <b>${gerekenAdet} adet</b> daha dinleme yapmalısın.
         `;
     }
 </script>
-
 </body>
 </html>
