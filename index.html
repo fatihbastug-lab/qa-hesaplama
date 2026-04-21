@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerçekçi Verimlilik Analizi</title>
+    <title>Verimlilik Takibi - Kesin Hesap</title>
     <style>
         :root { --primary: #cc0000; --secondary: #2c3e50; --bg: #f4f7f6; --card-bg: #ffffff; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 15px; display: flex; flex-direction: column; align-items: center; }
@@ -14,19 +14,21 @@
         .btn-main { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .res-badge { margin-top: 15px; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 20px; display: none; }
         .success { background: #27ae60; color: white; }
-        .warning { background: #f39c12; color: white; }
         .danger { background: #c0392b; color: white; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; display: none; }
         .stat-item { padding: 12px; border-radius: 8px; text-align: center; font-size: 12px; font-weight: bold; color: white; }
         .analysis-box { margin-top: 12px; padding: 12px; border-radius: 8px; background: #fffde7; border-left: 5px solid #fbc02d; font-size: 13px; line-height: 1.5; display: none; }
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-excel { background: #1f7244; color: white; flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-share { background: #3498db; color: white; flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="card">
         <div class="info-header">
-            🕒 Mesai: <b>08:30 - 18:45</b> (615 dk)<br>
-            🎯 Günlük Hedef: <b>%65</b>
+            🕒 Mesai: <b>08:30 - 18:45</b> | Toplam: <b>615 dk</b><br>
+            🎯 %65 Hedef Süresi: <b>355 dk</b>
         </div>
 
         <label>PERSONEL</label>
@@ -44,7 +46,7 @@
             <input type="number" id="ekSure" placeholder="Ort. Süre">
         </div>
 
-        <label>TOPLANTI / EĞİTİM (DAKİKA)</label>
+        <label>TOPLANTI / EĞİTİM (DK)</label>
         <input type="number" id="toplanti" placeholder="Toplam dk">
 
         <button class="btn-main" onclick="hesapla()">ANLIK DURUMU ANALİZ ET</button>
@@ -52,11 +54,16 @@
         <div id="verimSonuc" class="res-badge"></div>
 
         <div id="istatistikler" class="stats-grid">
-            <div class="stat-item" style="background: #2980b9;" id="uretimDk">0 dk Üretilen</div>
+            <div class="stat-item" style="background: #2980b9;" id="uretimDk">0 dk Çalışma</div>
             <div class="stat-item" style="background: #e67e22;" id="molaDk">0 dk Mola</div>
         </div>
 
         <div id="analizDetay" class="analysis-box"></div>
+
+        <div class="btn-group" id="footerButtons" style="display: none;">
+            <button class="btn-excel" onclick="excelIndir()">📊 EXCEL İNDİR</button>
+            <button class="btn-share" onclick="paylas()">📤 PAYLAŞ</button>
+        </div>
     </div>
 
 <script>
@@ -68,10 +75,9 @@
         const simdi = new Date();
         const baslangic = new Date(); baslangic.setHours(8, 30, 0);
         const bitis = new Date(); bitis.setHours(18, 45, 0);
-        const toplamMesai = 615;
-
+        
         let gecenDk = Math.floor((simdi - baslangic) / 60000);
-        gecenDk = Math.max(1, Math.min(gecenDk, toplamMesai));
+        gecenDk = Math.max(1, Math.min(gecenDk, 615));
         let kalanDk = Math.max(0, Math.floor((bitis - simdi) / 60000));
 
         const nA = parseFloat(document.getElementById('adet').value) || 0;
@@ -83,39 +89,50 @@
         // Üretim Hesaplama
         const uretim = (nA * nS) + (nA * 2) + (eA * (eS * 0.5)) + (tDk * 0.70);
         
-        // --- KRİTİK DÜZELTME: Toplam Mesaiye Oranla ---
-        const toplamVerim = ((uretim / toplamMesai) * 100).toFixed(1);
+        // Verimlilik Hesabı (%65 = 355 dk baz alınarak)
+        const hedefDk = 355; 
+        const toplamVerim = ((uretim / hedefDk) * 65).toFixed(1);
         const anlikMola = Math.max(0, gecenDk - uretim);
 
         // Hedef Analizi
-        const hedefDk = toplamMesai * 0.65; // 400 dk
         const kalanHedefDk = Math.max(0, hedefDk - uretim);
         const gerekenAdet = Math.ceil(kalanHedefDk / (nS + 2 || 10));
 
-        // UI Güncelleme
+        // UI
         const vBadge = document.getElementById('verimSonuc');
         vBadge.style.display = 'block';
-        vBadge.innerText = `%${toplamVerim} TOPLAM VERİMLİLİK`;
-        
-        if(toplamVerim >= 65) vBadge.className = 'res-badge success';
-        else if(toplamVerim >= 40) vBadge.className = 'res-badge warning';
-        else vBadge.className = 'res-badge danger';
+        vBadge.innerText = `%${toplamVerim} VERİMLİLİK`;
+        vBadge.className = toplamVerim >= 65 ? 'res-badge success' : 'res-badge danger';
 
         document.getElementById('istatistikler').style.display = 'grid';
-        document.getElementById('uretimDk').innerText = `${uretim.toFixed(0)} dk Çalışma`;
+        document.getElementById('uretimDk').innerText = `${uretim.toFixed(0)} dk Üretilen`;
         document.getElementById('molaDk').innerText = `${anlikMola.toFixed(0)} dk Mola`;
+        document.getElementById('footerButtons').style.display = 'flex';
 
         document.getElementById('analizDetay').style.display = 'block';
         document.getElementById('analizDetay').innerHTML = `
-            <b>🕒 Zaman Analizi:</b><br>
-            • Mesai başlayalı <b>${gecenDk} dk</b> oldu.<br>
-            • Şu ana kadarki mola/kayıp: <b>${anlikMola.toFixed(0)} dk</b>.<br>
-            • Mesai bitimine <b>${kalanDk} dk</b> kaldı.<br><br>
-            <b>🎯 Gün Sonu (%65) Hedefi:</b><br>
-            • Hedef için gereken toplam üretim: <b>${hedefDk.toFixed(0)} dk</b>.<br>
-            • Kalan hedef açığın: <b>${kalanHedefDk.toFixed(0)} dk</b>.<br>
-            • Hedefi yakalamak için <b>${gerekenAdet} adet</b> daha dinleme yapmalısın.
+            • Mesai bitimine <b>${kalanDk} dk</b> var.<br>
+            • Hedef için gereken ek iş: <b>${kalanHedefDk.toFixed(0)} dk</b>.<br>
+            • Kalan sürede yaklaşık <b>${gerekenAdet} adet</b> normal işlem daha yapmalısın.
         `;
+    }
+
+    function excelIndir() {
+        const isim = document.getElementById('personelSelect').value;
+        const verim = document.getElementById('verimSonuc').innerText;
+        const table = `<table><tr><th>Personel</th><th>Verim</th></tr><tr><td>${isim}</td><td>${verim}</td></tr></table>`;
+        const blob = new Blob(['\ufeff' + table], { type: 'application/vnd.ms-excel' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${isim}_Rapor.xls`;
+        a.click();
+    }
+
+    async function paylas() {
+        const metin = `📊 Rapor: ${document.getElementById('personelSelect').value}\nVerim: ${document.getElementById('verimSonuc').innerText}\n${document.getElementById('uretimDk').innerText}`;
+        if (navigator.share) { await navigator.share({ text: metin }); } 
+        else { navigator.clipboard.writeText(metin); alert("Kopyalandı!"); }
     }
 </script>
 </body>
