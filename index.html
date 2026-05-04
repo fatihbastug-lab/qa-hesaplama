@@ -1,1 +1,59 @@
+function hesapla() {
+    const simdi = new Date();
+    const baslangic = new Date(); baslangic.setHours(8, 30, 0);
+    const bitis = new Date(); bitis.setHours(18, 45, 0);
+    
+    // Sabitler
+    const netMesai = 540; // 615dk - 75dk mola
+    const hedefYuzde = 0.65;
+    const hedefDk = netMesai * hedefYuzde; // 351 dk
 
+    // Süre Hesaplama
+    let gecenBrutDk = Math.floor((simdi - baslangic) / 60000);
+    gecenBrutDk = Math.max(1, Math.min(gecenBrutDk, 615)); // Hata payını önle
+    let kalanDk = Math.max(0, Math.floor((bitis - simdi) / 60000));
+
+    // Input Değerleri (Hata almamak için 0 varsayıldı)
+    const nA = parseFloat(document.getElementById('adet').value) || 0;
+    const nS = parseFloat(document.getElementById('sure').value) || 0;
+    const eA = parseFloat(document.getElementById('ekAdet').value) || 0;
+    const eS = parseFloat(document.getElementById('ekSure').value) || 0;
+    const tDk = parseFloat(document.getElementById('toplanti').value) || 0;
+
+    // Üretim Formülü
+    // (İşlem Adedi * Süre) + (Adet Başı 2dk Sabit Pay) + (Ek İşlem Payı) + (Toplantı Verimi)
+    const uretim = (nA * nS) + (nA * 2) + (eA * (eS * 0.5)) + (tDk * 0.70);
+    
+    // Verimlilik Hesabı (Net 540 üzerinden)
+    const toplamVerim = ((uretim / netMesai) * 100).toFixed(1);
+    
+    // Kalan İş Tahmini
+    const kalanHedefDk = Math.max(0, hedefDk - uretim);
+    const ortSure = nS > 0 ? (nS + 2) : 10; // nS girilmemişse 10dk varsay
+    const gerekenAdet = Math.ceil(kalanHedefDk / ortSure);
+
+    // UI Güncelleme
+    const vBadge = document.getElementById('verimSonuc');
+    vBadge.style.display = 'block';
+    vBadge.innerText = `%${toplamVerim} VERİMLİLİK`;
+    
+    // Renk Kuralı: %65 Altı Kırmızı, Üstü Yeşil
+    vBadge.className = parseFloat(toplamVerim) >= 65 ? 'res-badge success' : 'res-badge danger';
+
+    document.getElementById('istatistikler').style.display = 'grid';
+    document.getElementById('uretimDk').innerText = `${uretim.toFixed(0)} dk Üretim`;
+    
+    // Kayıp Zaman Analizi
+    const anlikMolaPayi = (gecenBrutDk / 615) * 75;
+    const kayipDk = Math.max(0, (gecenBrutDk - anlikMolaPayi) - uretim);
+    document.getElementById('molaDk').innerText = `${kayipDk.toFixed(0)} dk Kayıp`;
+
+    document.getElementById('analizDetay').style.display = 'block';
+    document.getElementById('analizDetay').innerHTML = `
+        • Net Mesai: <b>540 dk</b> | Hedef (%65): <b>351 dk</b><br>
+        • Şu ana kadar <b>${uretim.toFixed(0)} dk</b> değerinde iş üretildi.<br>
+        • Minimum hedefe <b>${kalanHedefDk.toFixed(0)} dk</b> daha üretim gerekiyor.<br>
+        • Kalan <b>${kalanDk} dk</b> sürede yaklaşık <b>${gerekenAdet} adet</b> işlem yapılmalı.
+    `;
+    document.getElementById('footerButtons').style.display = 'flex';
+}
