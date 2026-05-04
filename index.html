@@ -5,7 +5,7 @@ function hesapla() {
     
     const netMesai = 540; 
     const hedefYuzde = 0.65;
-    const hedefDk = netMesai * hedefYuzde; 
+    const hedefDk = 351; 
 
     let gecenBrutDk = Math.floor((simdi - baslangic) / 60000);
     gecenBrutDk = Math.max(1, Math.min(gecenBrutDk, 615));
@@ -26,22 +26,17 @@ function hesapla() {
 
     const vBadge = document.getElementById('verimSonuc');
     vBadge.style.display = 'block';
-    vBadge.innerText = `%${toplamVerim} VERİMLİLİK`;
+    vBadge.innerText = '%' + toplamVerim + ' VERİMLİLİK';
     vBadge.className = parseFloat(toplamVerim) >= 65 ? 'res-badge success' : 'res-badge danger';
 
     document.getElementById('istatistikler').style.display = 'grid';
-    document.getElementById('uretimDk').innerText = `${uretim.toFixed(0)} dk Üretim`;
+    document.getElementById('uretimDk').innerText = Math.round(uretim) + ' dk Üretim';
     
     const anlikMolaPayi = (gecenBrutDk / 615) * 75;
     const kayipDk = Math.max(0, (gecenBrutDk - anlikMolaPayi) - uretim);
-    document.getElementById('molaDk').innerText = `${kayipDk.toFixed(0)} dk Kayıp`;
+    document.getElementById('molaDk').innerText = Math.round(kayipDk) + ' dk Kayıp';
 
     document.getElementById('analizDetay').style.display = 'block';
-    document.getElementById('analizDetay').innerHTML = `
-        • Net Mesai: <b>540 dk</b> | Hedef (%65): <b>351 dk</b><br>
-        • Şu ana kadar <b>${uretim.toFixed(0)} dk</b> üretim yapıldı.<br>
-        • Hedefe ulaşmak için <b>${kalanHedefDk.toFixed(0)} dk</b> daha iş gerekiyor.<br>
-        • Kalan sürede yaklaşık <b>${gerekenAdet} adet</b> işlem yapılmalı.
-    `;
+    document.getElementById('analizDetay').innerHTML = '• Net Mesai: <b>540 dk</b> | Hedef (%65): <b>351 dk</b><br>• Üretilen: <b>' + Math.round(uretim) + ' dk</b><br>• Hedefe Kalan: <b>' + Math.round(kalanHedefDk) + ' dk</b><br>• Gereken Ek İşlem: <b>' + gerekenAdet + ' adet</b>';
     document.getElementById('footerButtons').style.display = 'flex';
 }
